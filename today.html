@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="../src/index.js" defer></script>
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="menu">
+        <div class="option">
+          <a>Today</a>
+          <div class="optionTotal">7</div>
+        </div>
+        <div class="option">
+          <a>Weekly</a>
+          <div class="optionTotal">2</div>
+        </div>
+        <div class="project-title">
+          <h5>Projects</h5>
+          <div class="">
+            <div id="add-projects" class="projectOption">+</div>
+            <div id="show-projects" class="projectOption">
+              <i class="fa-solid fa-angle-down dropOptions"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="task-display">
+        <div class="display-container">
+          <div class="section-title"><h2>Overdue</h2></div>
+          <div id="overdue-tasks" class="big-container">
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-xmark deleteTask"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp2">
+                      <input type="checkbox" checked id="checkbox7" />
+                      <label for="checkbox7"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp3">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="new-task">+</div>
+            </div>
+          </div>
+          <div class="section-title date-heading">
+            <h2>Today</h2>
+            <h4>21 October</h4>
+          </div>
+          <div id="today-tasks" class="big-container">
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp1">
+                      <input type="checkbox" checked id="checkbox1" />
+                      <label for="checkbox1"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">5 pomodoros Odin</div>
+                    <div class="task-info">
+                      <div>
+                        <div class="task-duedate">December 24</div>
+                        <div>
+                          <div class="progress-container">
+                            <progress value="75" max="100">75%</progress>
+                          </div>
+                          <div class="progress-subtask">1/5 Subtasks</div>
+                        </div>
+                      </div>
+                      <p class="task-description">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Modi similique molestiae quam at quos vero
+                        voluptatum nisi quidem deserunt harum.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp2">
+                      <input type="checkbox" checked id="checkbox2" />
+                      <label for="checkbox2"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">
+                      Loaaaaaarem ipsum dolor sit amet consectetur adipisicing
+                      elit.
+                    </div>
+                    <div class="task-duedate">December 24</div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-container task-open">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp3">
+                      <input type="checkbox" checked id="checkbox3" />
+                      <label for="checkbox3"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">
+                      Lorem ipsf324um dolor sit amet consectetur adipisicing
+                      elit.
+                    </div>
+                    <div class="task-duedate">December 24</div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropSubtasks"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropOptions"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp4">
+                      <input type="checkbox" checked id="checkbox4" />
+                      <label for="checkbox4"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </div>
+                    <div class="task-duedate">December 24</div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-container">
+              <div class="task">
+                <div>
+                  <div class="task-check">
+                    <div class="round checkp4">
+                      <input type="checkbox" checked id="checkbox4" />
+                      <label for="checkbox4"></label>
+                    </div>
+                  </div>
+                  <div class="task-content">
+                    <div class="task-title">Lorem ipsum dolor sit amet.</div>
+                    <div class="task-duedate">December 24</div>
+                  </div>
+                </div>
+                <div class="task-options">
+                  <div><i class="fa-solid fa-ellipsis dropOptions"></i></div>
+                  <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+                </div>
+              </div>
+
+              <div class="subtask">
+                <div class="task-check">
+                  <div class="round checkp4">
+                    <input type="checkbox" checked id="checkbox4" />
+                    <label for="checkbox4"></label>
+                  </div>
+                </div>
+                <div class="task-content">
+                  <div class="task-title">
+                    Loremsit amet consectetur adipisicing elit.
+                  </div>
+                </div>
+              </div>
+              <div class="subtask">
+                <div class="task-check">
+                  <div class="round checkp4">
+                    <input type="checkbox" checked id="checkbox4" />
+                    <label for="checkbox4"></label>
+                  </div>
+                </div>
+                <div class="task-content">
+                  <div class="task-title">Loremsicing elit.</div>
+                </div>
+              </div>
+              <div class="new-subtask">+</div>
+            </div>
+
+            <div class="task-container">
+              <div class="new-task">+</div>
+            </div>
+          </div>
+
+          <div class="new-task-project">pending</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
