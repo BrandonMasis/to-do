@@ -191,6 +191,43 @@ body{
     background-color: #252730;
 }
 
+.project-tag{
+  background-color: greenyellow;
+  width: 10px;
+  height: 10px;
+}
+
+.project{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  padding: .6rem 1rem;
+ 
+  font-family: 'Lato', sans-serif;
+  color: var(--menuTextH);
+  font-weight: 500;
+  font-size: 20px;
+  border-radius: 4px;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.project div:nth-child(1){
+  display: flex;
+  align-items: center;
+  gap: .5em;
+}
+
+.project:hover{
+  background-color: #252730;
+}
+
+.progress-container{
+  display: flex;
+
+}
 
 .task-display{
     padding-top: 6rem;
