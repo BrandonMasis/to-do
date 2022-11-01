@@ -32,7 +32,7 @@ function generateWeekly() {
 function generateProject(project, actualProject) {
   const container = document.querySelector(".display-container");
   container.innerHTML = `<div class="section-title project-heading">
-  <div class="square"></div>
+  <div class="square" style=background-color:${actualProject.color}></div>
   <h2>${actualProject.name}</h2>
   </div>`;
 
@@ -43,7 +43,7 @@ function generateProject(project, actualProject) {
   }
 
   // container.innerHTML +=
-  console.log(actualProject);
+  console.log(project);
 }
 
 export { generateToday, generateWeekly, generateProject };

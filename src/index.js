@@ -26,6 +26,18 @@ const monthNames = [
   "December",
 ];
 
+//
+const taskFactory = (
+  title,
+  description,
+  dueDate,
+  priority,
+  subtasks,
+  isChecked
+) => {
+  return { title, description, dueDate, priority, subtasks, isChecked };
+};
+
 const allTasks = [
   {
     title: "Do laundry",
@@ -33,61 +45,52 @@ const allTasks = [
     dueDate: new Date(),
     priority: 2,
     subtasks: [
-      { title: "Wash clothes", isChecked: false },
+      { title: "Wash clothes", isChecked: true },
       { title: "Dry clothes", isChecked: false },
-      { title: "Fold clothes", isChecked: false },
+      { title: "Fold clothes", isChecked: true },
     ],
-    isChecked: false,
-    checkMate: function () {
-      if (this.isChecked == false) {
-        this.isChecked = true;
-      } else {
-        this.isChecked = false;
-      }
-    },
+    isChecked: true,
+
     project: "Study chess",
     category: "Piece development",
   },
   {
-    title: "Do laundry",
+    title: "Do laundry on nov3",
     description: "Wash, dry, and fold clothes",
-    dueDate: new Date("2021-03-06"),
+    dueDate: new Date("2022-10-3"),
     priority: 2,
     subtasks: [
-      { title: "Wash clothes", isChecked: false },
+      { title: "Wash clothes", isChecked: true },
       { title: "Dry clothes", isChecked: false },
-      { title: "Fold clothes", isChecked: false },
+      { title: "Fold clothes", isChecked: true },
       { title: "Wash clothes", isChecked: false },
-      { title: "Dry clothes", isChecked: false },
-      { title: "Fold clothes", isChecked: false },
+      { title: "Dry clothes", isChecked: true },
+      { title: "Fold clothes", isChecked: true },
     ],
     isChecked: false,
-    checkMate: function () {
-      if (this.isChecked == false) {
-        this.isChecked = true;
-      } else {
-        this.isChecked = false;
-      }
-    },
+    project: "Study chess",
+    category: "Piece development",
+  },
+
+  {
+    title: "Noviembre 6 test",
+    description: "Wash, dry, and fold clothes",
+    dueDate: new Date("2022-11-12"),
+    priority: 2,
+    subtasks: [
+      { title: "Wash clothes", isChecked: true },
+      { title: "Dry clothes", isChecked: false },
+      { title: "Fold clothes", isChecked: true },
+      { title: "Wash clothes", isChecked: false },
+      { title: "Dry clothes", isChecked: true },
+      { title: "Fold clothes", isChecked: true },
+    ],
+    isChecked: false,
     project: "Study chess",
     category: "Piece development",
   },
 ];
 
-function assignId() {
-  let count = -1;
-  allTasks.forEach((task) => {
-    count += 1;
-
-    task.id = count;
-  });
-
-  console.log(allTasks);
-}
-
-assignId();
-
-//Total() must be a function of the obj prototype
 const allProjects = [
   {
     name: "Household chores",
@@ -106,6 +109,7 @@ const allProjects = [
     categories: ["Piece development", "Watch hikaru", "Reach 1000 elo"],
   },
 ];
+//
 
 //Displays in the menu, the project name, color, and total tasks.
 function menuProjects() {
@@ -164,6 +168,15 @@ function filterToday() {
     .sort(comparePriority);
 }
 
+function filterWeekly() {
+  return allTasks
+    .filter(
+      (task) =>
+        task.dueDate >= startOfWeek(today) && task.dueDate <= endOfWeek(today)
+    )
+    .sort(comparePriority);
+}
+
 function filterCategory(list, category) {
   return list.filter(
     (task) => task.category == `${category.getAttribute("data-category")}`
@@ -174,6 +187,31 @@ function filterOverdue() {
   return allTasks.filter((task) => task.dueDate < today);
 }
 
+//
+function assignId() {
+  let taskId = -1;
+  allTasks.forEach((task) => {
+    let subtaskId = -1;
+
+    taskId += 1;
+    task.id = taskId;
+
+    task.subtasks.forEach((subtask) => {
+      subtaskId += 1;
+
+      subtask.id = subtaskId;
+    });
+  });
+}
+
+function isChecked(task) {
+  if (task.isChecked) {
+    return "checked";
+  } else {
+    return "";
+  }
+}
+
 function generateTaskHtml(container, task, subtaskHtml) {
   container.innerHTML += `
   <div class="task-container">
@@ -181,10 +219,10 @@ function generateTaskHtml(container, task, subtaskHtml) {
     <div>
       <div class="task-check">
         <div class="round checkp1">
-          <input type="checkbox" checked class="checkbox" data-id="${
-            task.id
-          }" />
-          <label "></label>
+          <input type="checkbox" class="checkbox" ${isChecked(
+            task
+          )} data-task-id="${task.id}" />
+          <label class="task-label"></label>
         </div>
       </div>
       <div class="task-content">
@@ -229,9 +267,13 @@ function generateSubtaskHtml(task) {
     <div class="subtask">
     <div class="task-check">
       <div class="round checkp3">
-        <input type="checkbox" checked class="checkbox" />
-        <label for="checkbox"></label>
-      </div>s
+        <input type="checkbox" ${isChecked(
+          subtask
+        )} class="checkbox" data-task-id="${task.id}" data-subtask-id="${
+        subtask.id
+      }"/>
+        <label class="subtask-label"></label>
+      </div>
     </div>
     <div class="task-content">
       <div class="task-title">
@@ -245,6 +287,7 @@ function generateSubtaskHtml(task) {
 
   return html;
 }
+//
 
 function displayWeeklyTasks() {
   const weeklyTasks = document.querySelector("#weekly-tasks");
@@ -255,38 +298,12 @@ function displayWeeklyTasks() {
     monthNames[endOfWeek(new Date()).getMonth()]
   } ${endOfWeek(new Date()).getDate()}`;
 
-  filterTasksByProject("$overdue").forEach((task) => {
+  filterWeekly().forEach((task) => {
     let subtaskHtml = generateSubtaskHtml(task);
     generateTaskHtml(weeklyTasks, task, subtaskHtml);
   });
 
   weeklyTasks.innerHTML += newTaskBtnHtml;
-}
-
-function checker() {
-  const labels = document.querySelectorAll("label");
-
-  labels.forEach((label) => {
-    label.addEventListener("click", () => {
-      const actualCheckbox = label.parentElement.querySelector(".checkbox");
-
-      if (actualCheckbox.checked == true) {
-        actualCheckbox.checked = false;
-        allTasks[
-          parseInt(actualCheckbox.getAttribute("data-id"))
-        ].isChecked = false;
-        console.table(allTasks);
-        console.log("Set to false");
-      } else {
-        actualCheckbox.checked = true;
-        allTasks[
-          parseInt(actualCheckbox.getAttribute("data-id"))
-        ].isChecked = true;
-        console.table(allTasks);
-        console.log("Set to true");
-      }
-    });
-  });
 }
 
 function displayTodayTasks() {
@@ -309,6 +326,14 @@ function displayTodayTasks() {
   overdueTasks.innerHTML += newTaskBtnHtml;
 }
 
+function showTotalTasks() {
+  const todayTotal = document.querySelector("#today-option .optionTotal");
+  const weeklyTotal = document.querySelector("#weekly-option .optionTotal");
+
+  todayTotal.textContent = `${filterToday().length}`;
+  weeklyTotal.textContent = `${filterToday().length}`;
+}
+
 function displayCategorieTasks(actualProject) {
   let projectTasks = filterTasksByProject(actualProject.name);
 
@@ -325,7 +350,7 @@ function displayCategorieTasks(actualProject) {
     category.innerHTML += newTaskBtnHtml;
   });
 
-  checker();
+  checkOnClick();
 }
 
 todayOption.addEventListener("click", () => {
@@ -333,7 +358,7 @@ todayOption.addEventListener("click", () => {
   displayTodayTasks();
   assignDropSubtasks();
   assignNewTaskFunction();
-  checker();
+  checkOnClick();
 });
 
 weeklyOption.addEventListener("click", () => {
@@ -341,19 +366,64 @@ weeklyOption.addEventListener("click", () => {
   displayWeeklyTasks();
   assignDropSubtasks();
   assignNewTaskFunction();
-  checker();
+  checkOnClick();
 });
 
-const taskFactory = (
-  title,
-  description,
-  dueDate,
-  priority,
-  subtasks,
-  isChecked
-) => {
-  return { title, description, dueDate, priority, subtasks, isChecked };
-};
+function checkOnClick() {
+  const taskLabels = document.querySelectorAll(".task-label");
+  const subtaskLabels = document.querySelectorAll(".subtask-label");
+
+  taskLabels.forEach((label) => {
+    label.addEventListener("click", () => {
+      const actualCheckbox = label.parentElement.querySelector(".checkbox");
+
+      if (
+        allTasks[parseInt(actualCheckbox.getAttribute("data-task-id"))]
+          .isChecked == true
+      ) {
+        actualCheckbox.checked = false;
+        allTasks[
+          parseInt(actualCheckbox.getAttribute("data-task-id"))
+        ].isChecked = false;
+
+        console.table(allTasks);
+        console.log("Set to false");
+      } else {
+        actualCheckbox.checked = true;
+        allTasks[
+          parseInt(actualCheckbox.getAttribute("data-task-id"))
+        ].isChecked = true;
+      }
+    });
+  });
+
+  subtaskLabels.forEach((label) => {
+    label.addEventListener("click", () => {
+      const actualCheckbox = label.parentElement.querySelector(".checkbox");
+
+      if (
+        (allTasks[
+          parseInt(actualCheckbox.getAttribute("data-task-id"))
+        ].subtasks[
+          parseInt(actualCheckbox.getAttribute("data-subtask-id"))
+        ].isChecked = true)
+      ) {
+        actualCheckbox.checked = false;
+
+        allTasks[
+          parseInt(actualCheckbox.getAttribute("data-task-id"))
+        ].subtasks[
+          parseInt(actualCheckbox.getAttribute("data-subtask-id"))
+        ].isChecked = false;
+      } else {
+        actualCheckbox.checked = true;
+        allTasks[
+          parseInt(actualCheckbox.getAttribute("data-id"))
+        ].isChecked = true;
+      }
+    });
+  });
+}
 
 function assignDropSubtasks() {
   const dropSubtasks = document.querySelectorAll(".dropSubtasks");
@@ -388,4 +458,6 @@ function assignNewTaskFunction() {
 
 //Function calls when you open the app
 
+assignId();
 menuProjects();
+showTotalTasks();
