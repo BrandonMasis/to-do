@@ -20,7 +20,7 @@ function generateWeekly() {
   const container = document.querySelector(".display-container");
   container.innerHTML = `<div class="section-title date-heading">
   <h2>Weekly</h2>
-  <h4>Oct 30 to Nov 5</h4>
+  <h4 id="actual-week">Oct 30 to Nov 5</h4>
   </div>
   <div id="weekly-tasks" class="big-container">
   
