@@ -38,6 +38,13 @@ const allTasks = [
       { title: "Fold clothes", isChecked: false },
     ],
     isChecked: false,
+    checkMate: function () {
+      if (this.isChecked == false) {
+        this.isChecked = true;
+      } else {
+        this.isChecked = false;
+      }
+    },
     project: "Study chess",
     category: "Piece development",
   },
@@ -55,10 +62,30 @@ const allTasks = [
       { title: "Fold clothes", isChecked: false },
     ],
     isChecked: false,
+    checkMate: function () {
+      if (this.isChecked == false) {
+        this.isChecked = true;
+      } else {
+        this.isChecked = false;
+      }
+    },
     project: "Study chess",
     category: "Piece development",
   },
 ];
+
+function assignId() {
+  let count = -1;
+  allTasks.forEach((task) => {
+    count += 1;
+
+    task.id = count;
+  });
+
+  console.log(allTasks);
+}
+
+assignId();
 
 //Total() must be a function of the obj prototype
 const allProjects = [
@@ -116,18 +143,35 @@ function menuProjects() {
   });
 }
 
+function comparePriority(a, b) {
+  if (a.priority < b.priority) {
+    return -1;
+  }
+  if (a.priority > b.priority) {
+    return 1;
+  }
+  // a must be equal to b
+  return 0;
+}
+
 function filterTasksByProject(query) {
-  return allTasks.filter((task) => task.project == query).sort(compareFn);
+  return allTasks.filter((task) => task.project == query).sort(comparePriority);
 }
 
 function filterToday() {
-  return allTasks.filter((task) => +task.dueDate == +today).sort(compareFn);
+  return allTasks
+    .filter((task) => +task.dueDate == +today)
+    .sort(comparePriority);
 }
 
 function filterCategory(list, category) {
   return list.filter(
     (task) => task.category == `${category.getAttribute("data-category")}`
   );
+}
+
+function filterOverdue() {
+  return allTasks.filter((task) => task.dueDate < today);
 }
 
 function generateTaskHtml(container, task, subtaskHtml) {
@@ -137,8 +181,10 @@ function generateTaskHtml(container, task, subtaskHtml) {
     <div>
       <div class="task-check">
         <div class="round checkp1">
-          <input type="checkbox" checked id="checkbox" />
-          <label for="checkbox"></label>
+          <input type="checkbox" checked class="checkbox" data-id="${
+            task.id
+          }" />
+          <label "></label>
         </div>
       </div>
       <div class="task-content">
@@ -150,7 +196,7 @@ function generateTaskHtml(container, task, subtaskHtml) {
             } ${getDate(task.dueDate)}</div>
             <div>
               <div class="progress-container">
-                <progress value="75" max="100">75%</progress>
+                <progress value="30" max="4">75%</progress>
               </div>
               <div class="progress-subtask">${"?"}/${
     task.subtasks.length
@@ -173,11 +219,6 @@ function generateTaskHtml(container, task, subtaskHtml) {
   <div class="new-subtask">+</div>
   </div>`;
 }
-menuProjects();
-
-function filterOverdue() {
-  return allTasks.filter((task) => task.dueDate < today);
-}
 
 function generateSubtaskHtml(task) {
   let html = "";
@@ -188,9 +229,9 @@ function generateSubtaskHtml(task) {
     <div class="subtask">
     <div class="task-check">
       <div class="round checkp3">
-        <input type="checkbox" checked id="checkbox" />
+        <input type="checkbox" checked class="checkbox" />
         <label for="checkbox"></label>
-      </div>
+      </div>s
     </div>
     <div class="task-content">
       <div class="task-title">
@@ -220,6 +261,32 @@ function displayWeeklyTasks() {
   });
 
   weeklyTasks.innerHTML += newTaskBtnHtml;
+}
+
+function checker() {
+  const labels = document.querySelectorAll("label");
+
+  labels.forEach((label) => {
+    label.addEventListener("click", () => {
+      const actualCheckbox = label.parentElement.querySelector(".checkbox");
+
+      if (actualCheckbox.checked == true) {
+        actualCheckbox.checked = false;
+        allTasks[
+          parseInt(actualCheckbox.getAttribute("data-id"))
+        ].isChecked = false;
+        console.table(allTasks);
+        console.log("Set to false");
+      } else {
+        actualCheckbox.checked = true;
+        allTasks[
+          parseInt(actualCheckbox.getAttribute("data-id"))
+        ].isChecked = true;
+        console.table(allTasks);
+        console.log("Set to true");
+      }
+    });
+  });
 }
 
 function displayTodayTasks() {
@@ -257,6 +324,8 @@ function displayCategorieTasks(actualProject) {
 
     category.innerHTML += newTaskBtnHtml;
   });
+
+  checker();
 }
 
 todayOption.addEventListener("click", () => {
@@ -264,6 +333,7 @@ todayOption.addEventListener("click", () => {
   displayTodayTasks();
   assignDropSubtasks();
   assignNewTaskFunction();
+  checker();
 });
 
 weeklyOption.addEventListener("click", () => {
@@ -271,6 +341,7 @@ weeklyOption.addEventListener("click", () => {
   displayWeeklyTasks();
   assignDropSubtasks();
   assignNewTaskFunction();
+  checker();
 });
 
 const taskFactory = (
@@ -315,13 +386,6 @@ function assignNewTaskFunction() {
   newTaskBtn.forEach((btn) => btn.addEventListener("click", () => {}));
 }
 
-function compareFn(a, b) {
-  if (a.priority < b.priority) {
-    return -1;
-  }
-  if (a.priority > b.priority) {
-    return 1;
-  }
-  // a must be equal to b
-  return 0;
-}
+//Function calls when you open the app
+
+menuProjects();
