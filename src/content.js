@@ -1,3 +1,21 @@
+import { getDate } from "date-fns";
+import { filterCheckedSubtasks } from "./filters.js";
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 function generateToday() {
   const container = document.querySelector(".display-container");
   container.innerHTML = `
@@ -29,6 +47,14 @@ function generateWeekly() {
   </div>`;
 }
 
+function isChecked(task) {
+  if (task.isChecked) {
+    return "checked";
+  } else {
+    return "";
+  }
+}
+
 function generateProject(project, actualProject) {
   const container = document.querySelector(".display-container");
   container.innerHTML = `<div class="section-title project-heading">
@@ -43,7 +69,88 @@ function generateProject(project, actualProject) {
   }
 
   // container.innerHTML +=
-  console.log(project);
 }
 
-export { generateToday, generateWeekly, generateProject };
+function generateTaskHtml(container, task, subtaskHtml) {
+  container.innerHTML += `
+  <div class="task-container">
+  <div class="task">
+    <div>
+      <div class="task-check">
+        <div class="round checkp1">
+          <input type="checkbox" class="checkbox" ${isChecked(
+            task
+          )} data-task-id="${task.id}" />
+          <label class="task-label"></label>
+        </div>
+      </div>
+      <div class="task-content">
+        <div class="task-title">${task.title}</div>
+        <div class="task-info">
+          <div>
+            <div class="task-duedate">${
+              monthNames[task.dueDate.getMonth()]
+            } ${getDate(task.dueDate)}</div>
+            <div>
+              <div class="progress-container">
+                <progress value="30" max="4">75%</progress>
+              </div>
+              <div class="progress-subtask">${filterCheckedSubtasks(task)}/${
+    task.subtasks.length
+  } Subtasks</div>
+            </div>
+          </div>
+          <p class="task-description">
+          ${task.description}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="task-options">
+      <div><i class="fa-solid fa-xmark deleteTask"></i></div>
+      <div><i class="fa-solid fa-angle-down dropSubtasks"></i></div>
+    </div>
+  </div>
+
+  ${subtaskHtml}
+  <div class="new-subtask">+</div>
+  </div>`;
+}
+
+function generateSubtaskHtml(task) {
+  let html = "";
+
+  if (task.subtasks != undefined) {
+    task.subtasks.forEach((subtask) => {
+      html += `
+    <div class="subtask">
+    <div class="task-check">
+      <div class="round checkp3">
+        <input type="checkbox" ${isChecked(
+          subtask
+        )} class="checkbox" data-task-id="${task.id}" data-subtask-id="${
+        subtask.id
+      }"/>
+        <label class="subtask-label"></label>
+      </div>
+    </div>
+    <div class="task-content">
+      <div class="task-title">
+       ${subtask.title}
+      </div>
+    </div>
+    </div>
+  `;
+    });
+  }
+
+  return html;
+}
+
+export {
+  generateToday,
+  generateWeekly,
+  generateProject,
+  generateTaskHtml,
+  generateSubtaskHtml,
+};
