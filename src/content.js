@@ -80,7 +80,7 @@ function generateTaskHtml(container, task, subtaskHtml) {
   <div class="task">
     <div>
       <div class="task-check">
-        <div class="round checkp1">
+        <div class="round checkp${task.priority}">
           <input type="checkbox" class="checkbox" ${isChecked(
             task
           )} data-task-id="${task.id}" />
@@ -131,7 +131,7 @@ function generateSubtaskHtml(task) {
       html += `
     <div class="subtask">
     <div class="task-check">
-      <div class="round checkp3">
+      <div class="round checkp4">
         <input type="checkbox" ${isChecked(
           subtask
         )} class="checkbox" data-task-id="${task.id}" data-subtask-id="${
