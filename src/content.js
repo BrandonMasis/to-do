@@ -26,7 +26,7 @@ function generateToday() {
       
     <div class="section-title date-heading">
       <h2>Today</h2>
-      <h4>21 October</h4>
+      <h4 id="actual-day">If you are reading, this something went wrong</h4>
     </div>
     <div id="today-tasks" class="big-container">
      
@@ -39,7 +39,7 @@ function generateWeekly() {
   const container = document.querySelector(".display-container");
   container.innerHTML = `<div class="section-title date-heading">
   <h2>Weekly</h2>
-  <h4 id="actual-week">Oct 30 to Nov 5</h4>
+  <h4 id="actual-week">If you are reading, this something went wrong</h4>
   </div>
   <div id="weekly-tasks" class="big-container">
   

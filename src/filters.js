@@ -1,5 +1,5 @@
 import { allTasks } from "./storage";
-import { startOfWeek, endOfWeek } from "date-fns";
+import { startOfWeek, endOfWeek, isToday } from "date-fns";
 
 const today = new Date();
 function comparePriority(a, b) {
@@ -18,9 +18,7 @@ function filterTasksByProject(query) {
 }
 
 function filterToday() {
-  return allTasks
-    .filter((task) => +task.dueDate == +today)
-    .sort(comparePriority);
+  return allTasks.filter((task) => isToday(task.dueDate)).sort(comparePriority);
 }
 
 function filterWeekly() {

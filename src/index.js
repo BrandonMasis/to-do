@@ -20,15 +20,18 @@ import {
 
 import { allTasks, allProjects } from "./storage";
 
-const todayOption = document.querySelector("#today-option");
-const weeklyOption = document.querySelector("#weekly-option");
-
 const newTaskBtnHtml = `<div class="task-container">
 <div class="new-task">+</div>
 </div>
 </div>`;
 
-//
+const todayOption = document.querySelector("#today-option");
+const weeklyOption = document.querySelector("#weekly-option");
+const projectsContainer = document.querySelector("#projects-container");
+
+let actualTab = "today-option";
+let actualProject = [];
+
 const taskFactory = (
   title,
   description,
@@ -40,12 +43,9 @@ const taskFactory = (
   return { title, description, dueDate, priority, subtasks, isChecked };
 };
 
-//
-
 //Displays in the menu, the project name, color, and total tasks.
-function menuProjects() {
-  const projectsContainer = document.querySelector("#projects-container");
 
+function showProjectsOnMenu() {
   allProjects.forEach(
     (item) =>
       (projectsContainer.innerHTML += `<div class="project" data-project="${
@@ -56,24 +56,21 @@ function menuProjects() {
         item.name
       }</h5></div> <div class="optionTotal">${item.total()}</div></div>`)
   );
+}
 
-  const projectOption = document.querySelectorAll(".project");
+function projectOptionEvent() {
+  const projectOptions = document.querySelectorAll(".project");
 
-  projectOption.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      let actualProject = allProjects.filter(
-        (item) => item.name == `${btn.getAttribute("data-project")}`
+  projectOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      actualProject = allProjects.filter(
+        (item) => item.name == `${option.getAttribute("data-project")}`
       )[0];
 
-      generateProject(
-        allTasks.filter(
-          (task) => task.project == `${btn.getAttribute("data-project")}`
-        ),
-        actualProject
-      );
+      actualTab = `${option.getAttribute("data-project")}`;
+      actualProject = actualProject;
 
-      displayCategorieTasks(actualProject);
-      assignDropSubtasks();
+      display(actualTab, actualProject);
     });
   });
 }
@@ -104,6 +101,13 @@ function showActualWeek() {
   } ${startOfWeek(new Date()).getDate()} to ${
     monthNames[endOfWeek(new Date()).getMonth()]
   } ${endOfWeek(new Date()).getDate()}`;
+}
+
+function showActualDay() {
+  const actualDay = document.querySelector("#actual-day");
+  actualDay.textContent = `${
+    monthNames[startOfWeek(new Date()).getMonth()]
+  } ${new Date().getDate()}`;
 }
 
 function displayWeeklyTasks() {
@@ -160,16 +164,16 @@ function displayCategorieTasks(actualProject) {
 
     category.innerHTML += newTaskBtnHtml;
   });
-
-  checkOnClick();
 }
 
 todayOption.addEventListener("click", () => {
-  display("today-option");
+  actualTab = "today-option";
+  display(actualTab, actualProject);
 });
 
 weeklyOption.addEventListener("click", () => {
-  display("weekly-option");
+  actualTab = "weekly-option";
+  display(actualTab, actualProject);
 });
 
 function checkOnClick() {
@@ -192,6 +196,8 @@ function checkOnClick() {
         actualCheckbox.checked = true;
         allTasks[taskId].isChecked = true;
       }
+
+      console.log(filterToday());
     });
   });
 
@@ -260,7 +266,16 @@ function assignNewTaskFunction() {
   const newTaskBtn = document.querySelectorAll(".new-task");
   newTaskBtn.forEach((btn) =>
     btn.addEventListener("click", () => {
-      // Open the menu and let's you create a new obj
+      let a = prompt("title");
+      let b = prompt("description");
+      let c = new Date();
+      let d = parseInt(prompt("1-4"));
+      let e = [];
+      let h = false;
+
+      allTasks.push(taskFactory(a, b, c, d, e, h));
+      assignId();
+      display(actualTab, actualProject);
     })
   );
 }
@@ -268,10 +283,12 @@ function assignNewTaskFunction() {
 //Function calls when you open the app
 
 assignId();
-menuProjects();
+showProjectsOnMenu();
+projectOptionEvent();
 showTotalTasks();
 
-display("today-option");
+display(actualTab, actualProject);
+
 // I'm showing the correct amount of tasks when displayed, but not on change
 //So probably just make a function that takes care of that, and remove
 
@@ -287,19 +304,28 @@ function assignDeleteTask() {
       );
 
       assignId();
-      display("today-option");
+      display(actualTab, actualProject);
+      showTotalTasks();
     });
   });
 }
 
-function display(actualTab) {
+function display(actualTab, actualProject) {
   if (actualTab == "today-option") {
     generateToday();
     displayTodayTasks();
+    showActualDay();
   } else if (actualTab == "weekly-option") {
     generateWeekly();
     displayWeeklyTasks();
     showActualWeek();
+  } else {
+    generateProject(
+      allTasks.filter((task) => task.project == actualTab),
+      actualProject
+    );
+
+    displayCategorieTasks(actualProject);
   }
 
   assignDropSubtasks();
