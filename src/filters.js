@@ -41,7 +41,9 @@ function filterCategory(list, category) {
 }
 
 function filterOverdue() {
-  return allTasks.filter((task) => task.dueDate < today);
+  return allTasks.filter(
+    (task) => task.dueDate < today && task.isChecked == false
+  );
 }
 
 export {

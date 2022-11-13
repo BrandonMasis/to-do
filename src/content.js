@@ -32,7 +32,7 @@ function generateToday() {
      
     </div>
 
-    <div class="new-task-project">pending</div>`;
+    `;
 }
 
 function generateWeekly() {
@@ -56,6 +56,14 @@ function isChecked(task) {
   }
 }
 
+function isMarked(task) {
+  if (task.isChecked) {
+    return "marked-task";
+  } else {
+    return "";
+  }
+}
+
 function generateProject(project, actualProject) {
   const container = document.querySelector(".display-container");
   container.innerHTML = `<div class="section-title project-heading">
@@ -63,15 +71,42 @@ function generateProject(project, actualProject) {
   <h2>${actualProject.name}</h2>
   </div>`;
 
+  container.innerHTML += `
+  
+  <div id="no-categorie" class="big-container"></div>
+`;
+
+  if (actualProject.categories.length == 0) {
+    container.innerHTML += `<div class="task-container">
+    <div class="new-task">+</div>
+    </div>
+    </div>`;
+  }
+
   for (let i = 0; i < actualProject.categories.length; i++) {
     container.innerHTML += `<div class="subtitle"><h3>${actualProject.categories[i]}</h3></div>
-    <div data-project="${actualProject.name}" data-category="${actualProject.categories[i]}" class="big-container">`;
+    <div data-project="${actualProject.name}" data-category="${actualProject.categories[i]}" class="big-container categorie">`;
   }
 
   //Gotta work on this
   container.innerHTML += ` <div class="subtitle new-subtitle">
   <input type="text" name="" id="" placeholder="Add a subtitle +" />
 </div>`;
+
+  `
+    <div class="section-title"><h2>Overdue</h2></div>
+
+    <div id="overdue-tasks" class="big-container"></div>
+      
+    <div class="section-title date-heading">
+      <h2>Today</h2>
+      <h4 id="actual-day">If you are reading, this something went wrong</h4>
+    </div>
+    <div id="today-tasks" class="big-container">
+     
+    </div>
+
+    <div class="new-task-project">pending</div>`;
 }
 
 function generateTaskHtml(container, task, subtaskHtml) {
@@ -86,7 +121,7 @@ function generateTaskHtml(container, task, subtaskHtml) {
         </div>
       </div>
       <div class="task-content">
-        <div class="task-title">${task.title}</div>
+        <div class="task-title ${isMarked(task)}">${task.title}</div>
         <div class="task-info">
           <div>
             <div class="task-duedate">${

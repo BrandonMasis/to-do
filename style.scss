@@ -39,11 +39,14 @@
     --menuTextH:#ffffff;
     --menuTextL:#707184;
     --displayTextH:#ffffffe3;
+
     --taskBg:#20212C;
     --taskTitle:#FFFFFF;
+    --checkedTitle:#afaeae;
     --taskDue:#7A7A7A;
     --taskDescription:#7A7A7A;
     --displayL:#707184;
+
     --priority1:#F95050;
     --priority1L:#f950508a;
     --priority2:#F9AB50;
@@ -336,9 +339,7 @@ body{
     background-color: coral;
 }
 
-.big-container{
-  margin-bottom: 5rem;
-}
+
 
 .task{
     display: flex;
@@ -394,7 +395,14 @@ body{
     color: var(--displayTextH);
 
     user-select: none;
+
+    text-decoration:none;
     
+}
+
+.marked-task{
+  color: var(--checkedTitle);
+  text-decoration: line-through;
 }
 
 .task-info{
@@ -717,8 +725,9 @@ progress {
     justify-content: center;
     align-items: center;
     max-width: 40rem;
+    margin-bottom: 5rem;
     height: 3rem;
-    width: 100%;
+    width: 40rem;
     border: var(--taskBg) solid 3px;
     border-radius: 5px;
 
@@ -777,4 +786,8 @@ progress {
     color: #4C4D5C;
   
     user-select: none;
+  }
+
+  #overdue-tasks{
+    margin-bottom: 5rem;
   }

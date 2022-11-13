@@ -43,9 +43,18 @@ const taskFactory = (
   return { title, description, dueDate, priority, subtasks, isChecked };
 };
 
+const projectFactory = (name, color, categories) => {
+  const total = () => {
+    return allTasks.filter((task) => task.project == `${name}`).length;
+  };
+
+  return { name, color, categories, total };
+};
+
 //Displays in the menu, the project name, color, and total tasks.
 
 function showProjectsOnMenu() {
+  projectsContainer.innerHTML = "";
   allProjects.forEach(
     (item) =>
       (projectsContainer.innerHTML += `<div class="project" data-project="${
@@ -137,8 +146,6 @@ function displayTodayTasks() {
     let subtaskHtml = generateSubtaskHtml(task);
     generateTaskHtml(overdueTasks, task, subtaskHtml);
   });
-
-  overdueTasks.innerHTML += newTaskBtnHtml;
 }
 
 function showTotalTasks() {
@@ -152,7 +159,7 @@ function showTotalTasks() {
 function displayCategorieTasks(actualProject) {
   let projectTasks = filterTasksByProject(actualProject.name);
 
-  const categories = document.querySelectorAll(".big-container");
+  const categories = document.querySelectorAll(".big-container.categorie");
 
   categories.forEach((category) => {
     let categoryTasks = filterCategory(projectTasks, category);
@@ -183,21 +190,22 @@ function checkOnClick() {
   taskLabels.forEach((label) => {
     label.addEventListener("click", () => {
       const actualCheckbox = label.parentElement.querySelector(".checkbox");
-      let taskId = parseInt(
-        actualCheckbox.parentElement.parentElement.parentElement.parentElement.getAttribute(
-          "data-task-id"
-        )
-      );
+      let actualTask =
+        actualCheckbox.parentElement.parentElement.parentElement.parentElement;
+
+      let taskId = parseInt(actualTask.getAttribute("data-task-id"));
 
       if (allTasks[taskId].isChecked == true) {
         actualCheckbox.checked = false;
         allTasks[taskId].isChecked = false;
+
+        actualTask.querySelector(".task-title").classList.remove("marked-task");
       } else {
         actualCheckbox.checked = true;
         allTasks[taskId].isChecked = true;
-      }
 
-      console.log(filterToday());
+        actualTask.querySelector(".task-title").classList.add("marked-task");
+      }
     });
   });
 
@@ -283,6 +291,7 @@ function assignNewTaskFunction() {
 //Function calls when you open the app
 
 assignId();
+
 showProjectsOnMenu();
 projectOptionEvent();
 showTotalTasks();
@@ -333,3 +342,15 @@ function display(actualTab, actualProject) {
   checkOnClick();
   assignDeleteTask();
 }
+
+const addProjectBtn = document.querySelector("#add-projects");
+
+addProjectBtn.addEventListener("click", () => {
+  let a = prompt("Project name");
+  let b = prompt("hex color");
+
+  allProjects.push(projectFactory(a, b, []));
+
+  showProjectsOnMenu();
+  projectOptionEvent();
+});
