@@ -165,20 +165,11 @@ function displayCategorieTasks(actualProject) {
 }
 
 todayOption.addEventListener("click", () => {
-  generateToday();
-  displayTodayTasks();
-  assignDropSubtasks();
-  assignNewTaskFunction();
-  checkOnClick();
+  display("today-option");
 });
 
 weeklyOption.addEventListener("click", () => {
-  generateWeekly();
-  displayWeeklyTasks();
-  showActualWeek();
-  assignDropSubtasks();
-  assignNewTaskFunction();
-  checkOnClick();
+  display("weekly-option");
 });
 
 function checkOnClick() {
@@ -188,7 +179,11 @@ function checkOnClick() {
   taskLabels.forEach((label) => {
     label.addEventListener("click", () => {
       const actualCheckbox = label.parentElement.querySelector(".checkbox");
-      let taskId = parseInt(actualCheckbox.getAttribute("data-task-id"));
+      let taskId = parseInt(
+        actualCheckbox.parentElement.parentElement.parentElement.parentElement.getAttribute(
+          "data-task-id"
+        )
+      );
 
       if (allTasks[taskId].isChecked == true) {
         actualCheckbox.checked = false;
@@ -204,7 +199,11 @@ function checkOnClick() {
     label.addEventListener("click", () => {
       const actualCheckbox = label.parentElement.querySelector(".checkbox");
       let taskId = parseInt(actualCheckbox.getAttribute("data-task-id"));
-      let subtaskId = parseInt(actualCheckbox.getAttribute("data-subtask-id"));
+      let subtaskId = parseInt(
+        actualCheckbox.parentElement.parentElement.parentElement.getAttribute(
+          "data-subtask-id"
+        )
+      );
 
       if (allTasks[taskId].subtasks[subtaskId].isChecked == true) {
         actualCheckbox.checked = false;
@@ -272,15 +271,39 @@ assignId();
 menuProjects();
 showTotalTasks();
 
-// function test() {
-//   console.log("working");
-//   document.querySelectorAll(".progress-test").forEach((item) => {
-//     item.addEventListener("click", () => {
-//       item.style.width = "70%";
-//       console.log("done");
-//     });
-//   });
-// }
-
+display("today-option");
 // I'm showing the correct amount of tasks when displayed, but not on change
 //So probably just make a function that takes care of that, and remove
+
+function assignDeleteTask() {
+  const deleteTaskBtns = document.querySelectorAll(
+    ".task-options div:nth-child(1)"
+  );
+  deleteTaskBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      allTasks.splice(
+        btn.parentElement.parentElement.getAttribute("data-task-id"),
+        1
+      );
+
+      assignId();
+      display("today-option");
+    });
+  });
+}
+
+function display(actualTab) {
+  if (actualTab == "today-option") {
+    generateToday();
+    displayTodayTasks();
+  } else if (actualTab == "weekly-option") {
+    generateWeekly();
+    displayWeeklyTasks();
+    showActualWeek();
+  }
+
+  assignDropSubtasks();
+  assignNewTaskFunction();
+  checkOnClick();
+  assignDeleteTask();
+}

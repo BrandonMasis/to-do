@@ -77,13 +77,11 @@ function generateProject(project, actualProject) {
 function generateTaskHtml(container, task, subtaskHtml) {
   container.innerHTML += `
   <div class="task-container">
-  <div class="task">
+  <div class="task" data-task-id="${task.id}">
     <div>
       <div class="task-check">
         <div class="round checkp${task.priority}">
-          <input type="checkbox" class="checkbox" ${isChecked(
-            task
-          )} data-task-id="${task.id}" />
+          <input type="checkbox" class="checkbox" ${isChecked(task)}  />
           <label class="task-label"></label>
         </div>
       </div>
@@ -129,14 +127,12 @@ function generateSubtaskHtml(task) {
   if (task.subtasks != undefined) {
     task.subtasks.forEach((subtask) => {
       html += `
-    <div class="subtask">
+    <div class="subtask" data-subtask-id="${subtask.id}">
     <div class="task-check">
       <div class="round checkp4">
         <input type="checkbox" ${isChecked(
           subtask
-        )} class="checkbox" data-task-id="${task.id}" data-subtask-id="${
-        subtask.id
-      }"/>
+        )} class="checkbox" data-task-id="${task.id}"/>
         <label class="subtask-label"></label>
       </div>
     </div>
