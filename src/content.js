@@ -1,5 +1,6 @@
 import { getDate } from "date-fns";
 import { filterCheckedSubtasks } from "./filters.js";
+import { allTasks } from "./storage.js";
 
 const monthNames = [
   "January",
@@ -62,13 +63,15 @@ function generateProject(project, actualProject) {
   <h2>${actualProject.name}</h2>
   </div>`;
 
-  //Generate a subtitle and a container for each with a distinct id
   for (let i = 0; i < actualProject.categories.length; i++) {
     container.innerHTML += `<div class="subtitle"><h3>${actualProject.categories[i]}</h3></div>
     <div data-project="${actualProject.name}" data-category="${actualProject.categories[i]}" class="big-container">`;
   }
 
-  // container.innerHTML +=
+  //Gotta work on this
+  container.innerHTML += ` <div class="subtitle new-subtitle">
+  <input type="text" name="" id="" placeholder="Add a subtitle +" />
+</div>`;
 }
 
 function generateTaskHtml(container, task, subtaskHtml) {
@@ -93,7 +96,10 @@ function generateTaskHtml(container, task, subtaskHtml) {
             } ${getDate(task.dueDate)}</div>
             <div>
               <div class="progress-container">
-                <progress value="30" max="4">75%</progress>
+              <div class="progress-bar" style="width:${
+                (100 / task.subtasks.length) * filterCheckedSubtasks(task)
+              }%;"></div>
+                <progress></progress>
               </div>
               <div class="progress-subtask">${filterCheckedSubtasks(task)}/${
     task.subtasks.length
@@ -153,4 +159,5 @@ export {
   generateProject,
   generateTaskHtml,
   generateSubtaskHtml,
+  monthNames,
 };

@@ -380,14 +380,15 @@ progress {
   width: 4rem;
 }
 
-.progress-container::before {
+.progress-bar {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  width: 80%;
+  width: 0%;
   background: var(--taskDue);
+  z-index: 2;
 }
 
 .progress-subtask {

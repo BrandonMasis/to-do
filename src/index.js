@@ -4,9 +4,11 @@ import {
   generateProject,
   generateTaskHtml,
   generateSubtaskHtml,
+  monthNames,
 } from "./content.js";
 
 import { startOfWeek, endOfWeek } from "date-fns";
+
 import {
   filterToday,
   filterWeekly,
@@ -214,11 +216,24 @@ function checkOnClick() {
         allTasks[taskId].subtasks[subtaskId].isChecked = true;
       }
 
-      actualCheckbox.parentElement.parentElement.parentElement.parentElement.querySelector(
-        ".progress-subtask"
-      ).textContent = `${filterCheckedSubtasks(allTasks[taskId])}/${
+      let progressText =
+        actualCheckbox.parentElement.parentElement.parentElement.parentElement.querySelector(
+          ".progress-subtask"
+        );
+
+      let progressBar =
+        actualCheckbox.parentElement.parentElement.parentElement.parentElement.querySelector(
+          ".progress-bar"
+        );
+
+      progressText.textContent = `${filterCheckedSubtasks(allTasks[taskId])}/${
         allTasks[taskId].subtasks.length
       } Subtasks`;
+
+      progressBar.style.width = `${
+        (100 / allTasks[taskId].subtasks.length) *
+        filterCheckedSubtasks(allTasks[taskId])
+      }%`;
     });
   });
 }
@@ -256,3 +271,16 @@ function assignNewTaskFunction() {
 assignId();
 menuProjects();
 showTotalTasks();
+
+// function test() {
+//   console.log("working");
+//   document.querySelectorAll(".progress-test").forEach((item) => {
+//     item.addEventListener("click", () => {
+//       item.style.width = "70%";
+//       console.log("done");
+//     });
+//   });
+// }
+
+// I'm showing the correct amount of tasks when displayed, but not on change
+//So probably just make a function that takes care of that, and remove

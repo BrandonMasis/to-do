@@ -2,7 +2,7 @@ const allTasks = [
   {
     title: "Do laundry",
     description: "Wash, dry, and fold clothes",
-    dueDate: new Date("2022-10-9"),
+    dueDate: new Date("2022-10-2"),
     priority: 2,
     subtasks: [
       { title: "Wash clothes", isChecked: true },
@@ -17,7 +17,7 @@ const allTasks = [
   {
     title: "Do laundry on nov3",
     description: "Wash, dry, and fold clothes",
-    dueDate: new Date("2022-10-9"),
+    dueDate: new Date("2022-10-2"),
     priority: 2,
     subtasks: [
       { title: "Wash clothes", isChecked: true },
