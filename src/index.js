@@ -7,7 +7,7 @@ import {
   monthNames,
 } from "./content.js";
 
-import { startOfWeek, endOfWeek } from "date-fns";
+import { startOfWeek, endOfWeek, toDate } from "date-fns";
 
 import {
   filterToday,
@@ -199,7 +199,7 @@ function showTotalTasks() {
 function displayCategorieTasks(actualProject) {
   let projectTasks = filterTasksByProject(actualProject.name);
 
-  const categories = document.querySelectorAll(".big-container.category ");
+  const categories = document.querySelectorAll(".big-container.category");
   const noCategoryContainer = document.querySelector("#no-category");
 
   let noCategoryTasks = filterNoCategory(projectTasks);
@@ -362,31 +362,69 @@ function assignNewTaskFunction() {
               e.target.parentElement.classList.add("open");
             }
           });
+
         document
           .querySelector("#taskform-add-btn")
-          .addEventListener("click", () => {
-            console.log(
-              `${document.querySelector("#taskform-name").value}${
-                document.querySelector("#taskform-description").value
-              }${document.querySelector("#taskform-duedate").value}`
-            );
+          .addEventListener("click", (e) => {
+            let taskName = document.querySelector("#taskform-name").value;
+            let taskDescription = document.querySelector(
+              "#taskform-description"
+            ).value;
+            let duedateSplit = document
+              .querySelector("#taskform-duedate")
+              .value.split("-");
+
+            let taskDuedate = duedateSplit.join(",");
+
+            if (actualTab == "today-option") {
+              allTasks.push(
+                taskFactory(
+                  taskName,
+                  taskDescription,
+                  new Date(taskDuedate),
+                  taskPriority,
+                  [],
+                  false,
+                  undefined,
+                  undefined
+                )
+              );
+            } else if (actualTab == "weekly-option") {
+              allTasks.push(
+                taskFactory(
+                  taskName,
+                  taskDescription,
+                  new Date(taskDuedate),
+                  new taskPriority(),
+                  [],
+                  false,
+                  undefined,
+                  undefined
+                )
+              );
+            } else {
+              allTasks.push(
+                taskFactory(
+                  taskName,
+                  taskDescription,
+                  new Date(taskDuedate),
+                  taskPriority,
+                  [],
+                  false,
+                  actualTab,
+                  e.target.parentElement.parentElement.parentElement.parentElement.getAttribute(
+                    "data-category"
+                  )
+                )
+              );
+            }
+
+            assignId();
+            display(actualTab, actualProject);
           });
       } else {
         return;
       }
-
-      // let a = prompt("title");
-      // let b = prompt("description");
-      // let c = new Date();
-      // let d = parseInt(prompt("1-4"));
-      // let e = [];
-      // let f = false;
-      // let g = prompt("project");
-      // let h = prompt("category");
-
-      // allTasks.push(taskFactory(a, b, c, d, e, f, g, h));
-      // assignId();
-      // display(actualTab, actualProject);
     })
   );
 }

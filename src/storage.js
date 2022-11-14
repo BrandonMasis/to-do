@@ -16,7 +16,7 @@ const allTasks = [
   {
     title: `Watch Steak 101`,
     description: "Starting with the basics",
-    dueDate: new Date("2022-11-18"),
+    dueDate: new Date(2022, 12 - 1, 14),
     priority: 1,
     subtasks: [
       { title: "Cook a Sirloin", isChecked: false },
@@ -33,7 +33,7 @@ const allTasks = [
   {
     title: `Spend 85$ on different cuts, and take notes about all the process, when preparing them`,
     description: "Starting with the basics",
-    dueDate: new Date("2022-11-18"),
+    dueDate: new Date(2022, 1 - 1, 18),
     priority: 3,
     subtasks: [],
     isChecked: false,
@@ -44,13 +44,13 @@ const allTasks = [
   {
     title: `Finish the contact me section`,
     description: "",
-    dueDate: new Date("2022-11-20"),
+    dueDate: new Date(2022, 1 - 1, 10),
     priority: 1,
     subtasks: [],
     isChecked: false,
 
     project: "Portfolio",
-    category: "Design ideas",
+    category: "Design",
   },
   {
     title: `Real estate site`,
@@ -66,7 +66,7 @@ const allTasks = [
   {
     title: `Productivity tracker`,
     description: "",
-    dueDate: new Date("2022-8-12"),
+    dueDate: new Date(2021, 1, 12),
     priority: 1,
     subtasks: [],
     isChecked: true,

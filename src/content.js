@@ -77,7 +77,9 @@ function generateProject(project, actualProject) {
 `;
 
   if (actualProject.categories.length == 0) {
-    container.innerHTML += `<div class="task-container">
+    document.querySelector(
+      "#no-category"
+    ).innerHTML += `<div class="task-container">
     <div class="new-task">+</div>
     </div>
     </div>`;
@@ -97,21 +99,6 @@ function generateProject(project, actualProject) {
 <h4><span class="actual-count">0</span>/<span class="max-count">50</span></h4>
 </div>
 </div>`;
-
-  `
-    <div class="section-title"><h2>Overdue</h2></div>
-
-    <div id="overdue-tasks" class="big-container"></div>
-      
-    <div class="section-title date-heading">
-      <h2>Today</h2>
-      <h4 id="actual-day">If you are reading, this something went wrong</h4>
-    </div>
-    <div id="today-tasks" class="big-container">
-     
-    </div>
-
-    <div class="new-task-project">pending</div>`;
 }
 
 function generateTaskHtml(container, task, subtaskHtml) {
