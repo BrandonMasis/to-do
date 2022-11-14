@@ -49,14 +49,25 @@
     --taskDescription:#7A7A7A;
     --displayL:#707184;
 
+    --addTaskBtn:#1088CB;
+    --addTaskBtnHover:#1870a0;
+
     --priority1:#F95050;
     --priority1L:#f950508a;
+    --priority1H:#cf5050;
+
     --priority2:#F9AB50;
     --priority2L:#f9aa508c;
+    --priority2H:#e09f54;
+
     --priority3:#9BB5F9;
     --priority3L:#9bb5f991;
+    --priority3H:#718ac9;
+
     --priority4:#4C4D5C;
     --priority4L:#4c4d5c50;
+    --priority4H:#46474e;
+
 
     --scrollTrack:#20212C;
     --scrollHandle:#7071843f;
@@ -334,8 +345,6 @@ body{
 
 .new-subtitle > div:nth-child(2){
   
- 
-
   font-size: 16px;
   font-family: 'Lato', sans-serif;
   font-weight: 700;
@@ -377,32 +386,21 @@ body{
  
  
 
- font-size: 18px;
+  font-size: 18px;
 
- border: 5px solid transparent;
- cursor: pointer;
+  border: 5px solid transparent;
+  cursor: pointer;
 
- display: none;
+  display: none;
 
-justify-content: center;
-align-items: center;
-height: 3rem;
-width: 3rem;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
+  width: 3rem;
 
-z-index: 2;
-
- 
 }
 
-.new-subtitle i:hover{
-  color: var(--menuTextL);
-  background-color: rgba(58, 58, 58, 0.13);
-  
- }
-
-
  .new-subtitle-open{
-
    
    &>div:nth-child(1){
     background-color: #4c4d5c1e;
@@ -418,6 +416,13 @@ z-index: 2;
   i{
     display: flex;
   } 
+
+  i:hover{
+    color: var(--menuTextL);
+    background-color: rgba(58, 58, 58, 0.13);
+    
+   }
+
   input{
     cursor: text;
     width: 100%;
@@ -840,6 +845,173 @@ progress {
     background-color: #4c4d5c0c;
   }
 
+  .new-task-form{
+    display: flex;
+    flex-direction: column;
+    max-width: 40rem;
+    height: 20rem;
+    width: 40rem;
+    border: none;
+    border-radius: 5px;
+    color: #4C4D5C;
+    user-select: none;
+    cursor: default;
+
+    .form{
+      border: var(--taskBg) solid 3px;
+      width: 100%;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border-radius: 10px;
+    }
+
+    .top{
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .bottom{
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #taskform-priority{
+      display: flex;
+      flex-direction: row;
+      width: fit-content;
+      gap: .3rem;
+    
+     
+
+      i{
+        font-size: 20px;
+        color: var(--displayL);
+        cursor: pointer;
+
+        &:hover{color: var(--new);}
+      }
+
+
+      .priority-option{
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50px;
+        cursor: pointer;
+        background-color: #1088CB;
+
+        display: none;
+      }
+  
+      .priority-option:nth-of-type(1){
+        background-color: var(--priority1);
+  
+        &:hover{
+          background-color: var(--priority1H);
+        }
+      }
+      .priority-option:nth-of-type(2){
+        background-color: var(--priority2);
+        &:hover{
+          background-color: var(--priority2H);
+        }
+      }
+      .priority-option:nth-of-type(3){
+        background-color: var(--priority3);
+        &:hover{
+          background-color: var(--priority3H);
+        }
+      }
+      .priority-option:nth-of-type(4){
+        background-color: var(--priority4);
+        &:hover{
+          background-color: var(--priority4H);
+        }
+      }
+
+    }
+
+    #taskform-priority.open{
+      i{
+        display: none;
+      }
+      .priority-option{
+        display: flex;
+      }
+    }
+   
+
+    #taskform-name{
+      color: var(--taskDue);
+      background-color: transparent;
+      border-style: none;
+      cursor: pointer;
+
+      font-size: 18px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+
+      &:focus{
+        outline: none;
+      }
+     
+    }
+
+    #taskform-description{
+      background-color: transparent;
+      color: var(--taskDue);
+      border-style: none;
+      cursor: pointer;
+
+      font-size: 16px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 500;
+    
+    }
+
+    .form-btns{
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
+      margin-top: .5rem;
+      gap: .2rem;
+    }
+
+    #taskform-cancel-btn{
+      background-color: var(--displayL);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 5px 15px;
+      border-radius: 4px;
+      color: var(--menuTextH);
+      cursor: pointer;
+
+      &:hover{
+        background-color: var(--new);
+      }
+    }
+
+    #taskform-add-btn{
+      background-color: var(--addTaskBtn);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 5px 15px;
+      border-radius: 4px;
+      color: var(--menuTextH);
+      cursor: pointer;
+
+      &:hover{
+        background-color: var(--addTaskBtnHover);
+      }
+    }
+
+  }
+
+  .new-task-form:hover{
+    background-color: transparent;
+  }
+
   .new-subtask{
     display: none;
     justify-content: center;
@@ -869,20 +1041,11 @@ progress {
   }
 
 
-  .new-task-form{
-    display: flex;
-    
-    max-width: 40rem;
-    height: 3rem;
-    width: 100%;
-    border: var(--taskBg) solid 3px;
-    border-radius: 5px;
 
-    color: #4C4D5C;
-  
-    user-select: none;
-  }
 
   #overdue-tasks{
     margin-bottom: 5rem;
   }
+
+
+  

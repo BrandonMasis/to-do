@@ -26,6 +26,27 @@ const newTaskBtnHtml = `<div class="task-container">
 </div>
 </div>`;
 
+const newTaskFormHtml = `<div class="form">
+<div class="top">
+  <input type="text" id="taskform-name"
+    placeholder="Task name">
+  <input type="text" id="taskform-description"
+    placeholder="Description">
+</div>
+<div class="bottom">
+  <input type="date" id="taskform-duedate"
+    placeholder="Due date">
+  <div id="taskform-priority"><i class="fa-solid fa-flag"></i><div class="priority-option" data-priority="1"></div><div class="priority-option" data-priority="2"></div><div class="priority-option" data-priority="3"></div><div class="priority-option" data-priority="4"></div></div>
+</div>
+</div>
+<div class="form-btns">
+<div id="taskform-cancel-btn">Cancel</div>
+<div id="taskform-add-btn">Add Task</div>
+
+</div>`;
+
+const priorityColors = ["#F95050", "#F9AB50", "#9BB5F9", "#4C4D5C"];
+
 const todayOption = document.querySelector("#today-option");
 const weeklyOption = document.querySelector("#weekly-option");
 const projectsContainer = document.querySelector("#projects-container");
@@ -172,7 +193,7 @@ function showTotalTasks() {
   const weeklyTotal = document.querySelector("#weekly-option .optionTotal");
 
   todayTotal.textContent = `${filterToday().length}`;
-  weeklyTotal.textContent = `${filterToday().length}`;
+  weeklyTotal.textContent = `${filterWeekly().length}`;
 }
 
 function displayCategorieTasks(actualProject) {
@@ -301,18 +322,71 @@ function assignNewTaskFunction() {
   const newTaskBtn = document.querySelectorAll(".new-task");
   newTaskBtn.forEach((btn) =>
     btn.addEventListener("click", () => {
-      let a = prompt("title");
-      let b = prompt("description");
-      let c = new Date();
-      let d = parseInt(prompt("1-4"));
-      let e = [];
-      let f = false;
-      let g = prompt("project");
-      let h = prompt("category");
+      if (btn.classList.contains("new-task-form") == false) {
+        btn.classList.add("new-task-form");
 
-      allTasks.push(taskFactory(a, b, c, d, e, f, g, h));
-      assignId();
-      display(actualTab, actualProject);
+        // Select priority and store the option
+        let taskPriority = 4;
+
+        document.querySelector(".new-task-form").innerHTML = newTaskFormHtml;
+        document.querySelectorAll(".priority-option").forEach((option) => {
+          option.addEventListener("click", () => {
+            taskPriority = option.getAttribute("data-priority");
+
+            document.querySelector(".fa-flag").style.color =
+              priorityColors[taskPriority - 1];
+            option.parentElement.classList.remove("open");
+          });
+        });
+
+        document
+          .querySelector(".new-task-form")
+          .addEventListener("click", (e) => {
+            if (
+              e.target.classList.contains("priority-option") == false &&
+              document
+                .querySelector("#taskform-priority")
+                .classList.contains("open") &&
+              e.target.classList.contains("fa-flag") == false
+            ) {
+              document
+                .querySelector("#taskform-priority")
+                .classList.remove("open");
+            }
+          });
+
+        document
+          .querySelector("#taskform-priority")
+          .addEventListener("click", (e) => {
+            if (e.target.classList.contains("fa-flag")) {
+              e.target.parentElement.classList.add("open");
+            }
+          });
+        document
+          .querySelector("#taskform-add-btn")
+          .addEventListener("click", () => {
+            console.log(
+              `${document.querySelector("#taskform-name").value}${
+                document.querySelector("#taskform-description").value
+              }${document.querySelector("#taskform-duedate").value}`
+            );
+          });
+      } else {
+        return;
+      }
+
+      // let a = prompt("title");
+      // let b = prompt("description");
+      // let c = new Date();
+      // let d = parseInt(prompt("1-4"));
+      // let e = [];
+      // let f = false;
+      // let g = prompt("project");
+      // let h = prompt("category");
+
+      // allTasks.push(taskFactory(a, b, c, d, e, f, g, h));
+      // assignId();
+      // display(actualTab, actualProject);
     })
   );
 }
