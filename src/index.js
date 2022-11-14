@@ -416,30 +416,42 @@ function assignNewSubtitleFunction() {
   let newSubtitleCharacters = document.querySelector(
     ".new-subtitle .actual-count"
   );
+  let newSubtitleCheck = newSubtitleContainer.querySelector("i");
 
-  newSubtitleBtn.addEventListener("focus", () => {
-    newSubtitleContainer.querySelector("div:nth-child(1)").style.cssText =
-      "background-color:#4646472d";
-
-    newSubtitleContainer.querySelector("div:nth-child(2)").style.display =
-      "flex";
-
-    newSubtitleContainer.querySelector("i").style.display = "flex";
-  });
-
-  newSubtitleBtn.addEventListener("focusout", () => {
-    newSubtitleContainer.querySelector("div:nth-child(1)").style.cssText =
-      "background-color: transparent";
-
-    newSubtitleContainer.querySelector("div:nth-child(2)").style.display =
-      "none";
-
-    newSubtitleContainer.querySelector("i").style.display = "none";
-
-    newSubtitleBtn.value = "";
+  newSubtitleBtn.addEventListener("click", () => {
+    newSubtitleContainer.classList.add("new-subtitle-open");
   });
 
   newSubtitleBtn.addEventListener("input", () => {
     newSubtitleCharacters.textContent = newSubtitleBtn.value.length;
   });
+
+  //
+  newSubtitleCheck.addEventListener("click", () => {
+    actualProject.categories.push(
+      document.querySelector("#new-subtitle-btn").value
+    );
+
+    display(actualTab, actualProject);
+  });
 }
+
+// So do it with classes intead of focus, when you click de window, if the thing still has the class on, remove it.
+
+window.addEventListener("click", (e) => {
+  if (document.querySelector(".new-subtitle-open") != null) {
+    if (e.target.classList.contains("fa-check")) {
+      return;
+    } else if (e.target.id == "new-subtitle-btn") {
+      return;
+    } else {
+      document.querySelector("#new-subtitle-btn").value = "";
+
+      document.querySelector(".actual-count").textContent = "0";
+
+      document
+        .querySelector(".new-subtitle-open")
+        .classList.remove("new-subtitle-open");
+    }
+  }
+});
