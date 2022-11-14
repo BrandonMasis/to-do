@@ -40,6 +40,8 @@
     --menuTextL:#707184;
     --displayTextH:#ffffffe3;
 
+    --new:#4C4D5C;
+
     --taskBg:#20212C;
     --taskTitle:#FFFFFF;
     --checkedTitle:#afaeae;
@@ -298,19 +300,47 @@ body{
 }
 
 .new-subtitle{
-  width: fit-content;
+
   display: flex;
-  justify-content: center;
-  align-self: center;
+  flex-direction: column;
+  
+  
+  justify-content: space-between;
+  width: 100%;
+  max-width: 40rem;
  
-  margin-left: 1rem;
+  
+}
+
+.new-subtitle > div:nth-child(1){
+
+  display: flex;
   border-radius: 8px;
 }
+
+.new-subtitle > div:nth-child(2){
+  
+  display: flex;
+
+  font-size: 16px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  color: var(--taskBg);
+  padding-left: 1rem;
+  .actual-count{
+    color: var(--new);
+  }
+
+  display: none;
+  
+}
+
 
 .new-subtitle input{
   color: var(--displayL) !important;
   background-color: transparent;
   border-style: none;
+  width: 100%;
   padding: .5em 1em;
   cursor: pointer;
   
@@ -318,15 +348,33 @@ body{
   font-family: 'Lato', sans-serif;
   font-weight: 700;
   outline: none;
+
+  
   
 }
 
 .new-subtitle input:focus  {
   cursor: text;
+
   
 }
 
-.new-subtitle:hover{
+.new-subtitle i{
+ color: greenyellow;
+ position: relative;
+ 
+ bottom: -7px;
+ left: -5px;
+ font-size: 18px;
+
+ border: 5px solid transparent;
+ cursor: pointer;
+
+ display: none;
+ 
+}
+
+.new-subtitle > div:nth-child(1):hover{
   background-color: #4646472d;
   
 }

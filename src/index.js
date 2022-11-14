@@ -16,6 +16,7 @@ import {
   filterCheckedSubtasks,
   filterCategory,
   filterOverdue,
+  filterNoCategory,
 } from "./filters.js";
 
 import { allTasks, allProjects } from "./storage";
@@ -38,9 +39,27 @@ const taskFactory = (
   dueDate,
   priority,
   subtasks,
-  isChecked
+  isChecked,
+  project,
+  category
 ) => {
-  return { title, description, dueDate, priority, subtasks, isChecked };
+  return {
+    title,
+    description,
+    dueDate,
+    priority,
+    subtasks,
+    isChecked,
+    project,
+    category,
+  };
+};
+
+const subtaskFactory = (title, isChecked) => {
+  return {
+    title,
+    isChecked,
+  };
 };
 
 const projectFactory = (name, color, categories) => {
@@ -159,7 +178,15 @@ function showTotalTasks() {
 function displayCategorieTasks(actualProject) {
   let projectTasks = filterTasksByProject(actualProject.name);
 
-  const categories = document.querySelectorAll(".big-container.categorie");
+  const categories = document.querySelectorAll(".big-container.category ");
+  const noCategoryContainer = document.querySelector("#no-category");
+
+  let noCategoryTasks = filterNoCategory(projectTasks);
+
+  noCategoryTasks.forEach((item) => {
+    let subtaskHtml = generateSubtaskHtml(item);
+    generateTaskHtml(noCategoryContainer, item, subtaskHtml);
+  });
 
   categories.forEach((category) => {
     let categoryTasks = filterCategory(projectTasks, category);
@@ -279,11 +306,37 @@ function assignNewTaskFunction() {
       let c = new Date();
       let d = parseInt(prompt("1-4"));
       let e = [];
-      let h = false;
+      let f = false;
+      let g = prompt("project");
+      let h = prompt("category");
 
-      allTasks.push(taskFactory(a, b, c, d, e, h));
+      allTasks.push(taskFactory(a, b, c, d, e, f, g, h));
       assignId();
       display(actualTab, actualProject);
+    })
+  );
+}
+
+function assignNewSubtaskFunction() {
+  const newSubtaskBtn = document.querySelectorAll(".new-subtask");
+  newSubtaskBtn.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      let a = prompt("title");
+      let b = false;
+      let taskIndex = btn.parentElement
+        .querySelector(".task")
+        .getAttribute("data-task-id");
+
+      allTasks[taskIndex].subtasks.push(subtaskFactory(a, b));
+      assignId();
+      display(actualTab, actualProject);
+
+      // Opens the container, so you see the subtask being added
+      document
+        .querySelector(`[data-task-id="${taskIndex}"]`)
+        .parentElement.classList.add("task-open");
+
+      console.log(allTasks);
     })
   );
 }
@@ -335,10 +388,12 @@ function display(actualTab, actualProject) {
     );
 
     displayCategorieTasks(actualProject);
+    assignNewSubtitleFunction();
   }
 
   assignDropSubtasks();
   assignNewTaskFunction();
+  assignNewSubtaskFunction();
   checkOnClick();
   assignDeleteTask();
 }
@@ -354,3 +409,37 @@ addProjectBtn.addEventListener("click", () => {
   showProjectsOnMenu();
   projectOptionEvent();
 });
+
+function assignNewSubtitleFunction() {
+  let newSubtitleContainer = document.querySelector(".new-subtitle");
+  let newSubtitleBtn = document.querySelector("#new-subtitle-btn");
+  let newSubtitleCharacters = document.querySelector(
+    ".new-subtitle .actual-count"
+  );
+
+  newSubtitleBtn.addEventListener("focus", () => {
+    newSubtitleContainer.querySelector("div:nth-child(1)").style.cssText =
+      "background-color:#4646472d";
+
+    newSubtitleContainer.querySelector("div:nth-child(2)").style.display =
+      "flex";
+
+    newSubtitleContainer.querySelector("i").style.display = "flex";
+  });
+
+  newSubtitleBtn.addEventListener("focusout", () => {
+    newSubtitleContainer.querySelector("div:nth-child(1)").style.cssText =
+      "background-color: transparent";
+
+    newSubtitleContainer.querySelector("div:nth-child(2)").style.display =
+      "none";
+
+    newSubtitleContainer.querySelector("i").style.display = "none";
+
+    newSubtitleBtn.value = "";
+  });
+
+  newSubtitleBtn.addEventListener("input", () => {
+    newSubtitleCharacters.textContent = newSubtitleBtn.value.length;
+  });
+}

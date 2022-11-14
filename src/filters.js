@@ -34,6 +34,10 @@ function filterCheckedSubtasks(task) {
   return task.subtasks.filter((subtask) => subtask.isChecked == true).length;
 }
 
+function filterNoCategory(list) {
+  return list.filter((task) => task.category == "");
+}
+
 function filterCategory(list, category) {
   return list.filter(
     (task) => task.category == `${category.getAttribute("data-category")}`
@@ -53,4 +57,5 @@ export {
   filterCheckedSubtasks,
   filterCategory,
   filterOverdue,
+  filterNoCategory,
 };

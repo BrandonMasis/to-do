@@ -73,7 +73,7 @@ function generateProject(project, actualProject) {
 
   container.innerHTML += `
   
-  <div id="no-categorie" class="big-container"></div>
+  <div id="no-category" class="big-container"></div>
 `;
 
   if (actualProject.categories.length == 0) {
@@ -85,12 +85,17 @@ function generateProject(project, actualProject) {
 
   for (let i = 0; i < actualProject.categories.length; i++) {
     container.innerHTML += `<div class="subtitle"><h3>${actualProject.categories[i]}</h3></div>
-    <div data-project="${actualProject.name}" data-category="${actualProject.categories[i]}" class="big-container categorie">`;
+    <div data-project="${actualProject.name}" data-category="${actualProject.categories[i]}" class="big-container category">`;
   }
 
   //Gotta work on this
-  container.innerHTML += ` <div class="subtitle new-subtitle">
-  <input type="text" name="" id="" placeholder="Add a subtitle +" />
+  container.innerHTML += `<div class="subtitle new-subtitle">
+<div>
+<input type="text" id="new-subtitle-btn" placeholder="Add a subtitle +" maxlength="50"/><i class="fa-solid fa-check"></i>
+</div>
+<div class="subtitle-character-count">
+<h4><span class="actual-count">0</span>/<span class="max-count">50</span></h4>
+</div>
 </div>`;
 
   `

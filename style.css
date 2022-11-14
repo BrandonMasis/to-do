@@ -32,6 +32,7 @@
   --menuTextH:#ffffff;
   --menuTextL:#707184;
   --displayTextH:#ffffffe3;
+  --new:#4C4D5C;
   --taskBg:#20212C;
   --taskTitle:#FFFFFF;
   --checkedTitle:#afaeae;
@@ -250,18 +251,36 @@ body {
 }
 
 .new-subtitle {
-  width: fit-content;
   display: flex;
-  justify-content: center;
-  align-self: center;
-  margin-left: 1rem;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 40rem;
+}
+
+.new-subtitle > div:nth-child(1) {
+  display: flex;
   border-radius: 8px;
+}
+
+.new-subtitle > div:nth-child(2) {
+  display: flex;
+  font-size: 16px;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  color: var(--taskBg);
+  padding-left: 1rem;
+  display: none;
+}
+.new-subtitle > div:nth-child(2) .actual-count {
+  color: var(--new);
 }
 
 .new-subtitle input {
   color: var(--displayL) !important;
   background-color: transparent;
   border-style: none;
+  width: 100%;
   padding: 0.5em 1em;
   cursor: pointer;
   font-size: 19px;
@@ -274,7 +293,18 @@ body {
   cursor: text;
 }
 
-.new-subtitle:hover {
+.new-subtitle i {
+  color: greenyellow;
+  position: relative;
+  bottom: -7px;
+  left: -5px;
+  font-size: 18px;
+  border: 5px solid transparent;
+  cursor: pointer;
+  display: none;
+}
+
+.new-subtitle > div:nth-child(1):hover {
   background-color: rgba(70, 70, 71, 0.1764705882);
 }
 
