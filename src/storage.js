@@ -138,31 +138,37 @@
 //   },
 // ];
 
-const allProjects = [
-  {
-    name: "Learning to cook",
-    color: "#fcc203",
-    total() {
-      return allTasks.filter((task) => task.project == `${this.name}`).length;
-    },
-    categories: ["Tutorials", "Recipes", "Equipment"],
-  },
-  {
-    name: "Portfolio",
-    color: "#24f06b",
-    total() {
-      return allTasks.filter((task) => task.project == `${this.name}`).length;
-    },
-    categories: ["Design", "Projects", "SEO"],
-  },
-];
-
+// const allProjects = [
+//   {
+//     name: "Learning to cook",
+//     color: "#fcc203",
+//     total() {
+//       return allTasks.filter((task) => task.project == `${this.name}`).length;
+//     },
+//     categories: ["Tutorials", "Recipes", "Equipment"],
+//   },
+//   {
+//     name: "Portfolio",
+//     color: "#24f06b",
+//     total() {
+//       return allTasks.filter((task) => task.project == `${this.name}`).length;
+//     },
+//     categories: ["Design", "Projects", "SEO"],
+//   },
+// ];
+let allProjects = [];
 let allTasks = [];
 
 if (localStorage.getItem("all-tasks") == null) {
   allTasks = [];
 } else {
   allTasks = JSON.parse(localStorage.getItem("all-tasks"));
+}
+
+if (localStorage.getItem("all-projects") == null) {
+  allProjects = [];
+} else {
+  allProjects = JSON.parse(localStorage.getItem("all-projects"));
 }
 
 console.log(allTasks);

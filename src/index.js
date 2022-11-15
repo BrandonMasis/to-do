@@ -84,26 +84,27 @@ const subtaskFactory = (title, isChecked) => {
 };
 
 const projectFactory = (name, color, categories) => {
-  const total = () => {
-    return allTasks.filter((task) => task.project == `${name}`).length;
-  };
+  // const total = () => {
+  //   return allTasks.filter((task) => task.project == `${name}`).length;
+  // };
 
-  return { name, color, categories, total };
+  return { name, color, categories };
 };
 
 //Displays in the menu, the project name, color, and total tasks.
 
 function showProjectsOnMenu() {
   projectsContainer.innerHTML = "";
+
   allProjects.forEach(
     (item) =>
       (projectsContainer.innerHTML += `<div class="project" data-project="${
         item.name
       }"><div><span class="project-tag" style="background-color:${
         item.color
-      }"></span> <h5>${
-        item.name
-      }</h5></div> <div class="optionTotal">${item.total()}</div></div>`)
+      }"></span> <h5>${item.name}</h5></div> <div class="optionTotal">${
+        allTasks.filter((task) => task.project == item.name).length
+      }</div></div>`)
   );
 }
 
@@ -283,12 +284,19 @@ function assignDeleteTask() {
   const deleteTaskBtns = document.querySelectorAll(
     ".task-options div:nth-child(1)"
   );
+
   deleteTaskBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      allTasks.splice(
-        btn.parentElement.parentElement.getAttribute("data-task-id"),
-        1
-      );
+      if (allTasks.length > 1) {
+        allTasks.splice(
+          btn.parentElement.parentElement.getAttribute("data-task-id"),
+          1
+        );
+      } else {
+        allTasks = [];
+      }
+
+      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
 
       assignId();
       display(actualTab, actualProject);
@@ -518,6 +526,12 @@ function display(actualTab, actualProject) {
     allTasks = JSON.parse(localStorage.getItem("all-tasks"));
   }
 
+  // if (localStorage.getItem("all-projects") == null) {
+  //   allProjects = [];
+  // } else {
+  //   allProjects = JSON.parse(localStorage.getItem("all-projects"));
+  // }
+
   if (actualTab == "today-option") {
     generateToday();
     displayTodayTasks();
@@ -560,8 +574,7 @@ addProjectBtn.addEventListener("click", () => {
     let b = document.querySelector(".new-project-color").value;
 
     allProjects.push(projectFactory(a, b, []));
-
-    console.log(allProjects);
+    localStorage.setItem("all-projects", JSON.stringify(allProjects));
 
     showProjectsOnMenu();
     projectOptionEvent();
