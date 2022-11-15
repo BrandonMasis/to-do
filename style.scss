@@ -450,6 +450,8 @@ body{
     border-radius: 10px;
     gap: .3em;
     justify-content: space-between;
+    align-items: center;
+    
     
 }
 
@@ -848,8 +850,7 @@ progress {
   .new-task-form{
     display: flex;
     flex-direction: column;
-    max-width: 40rem;
-    height: 20rem;
+    height: fit-content;
     width: 40rem;
     border: none;
     border-radius: 5px;
@@ -967,6 +968,10 @@ progress {
       font-size: 16px;
       font-family: 'Lato', sans-serif;
       font-weight: 500;
+
+      &:focus{
+        outline: none;
+      }
     
     }
 
@@ -1004,6 +1009,21 @@ progress {
       &:hover{
         background-color: var(--addTaskBtnHover);
       }
+    }
+
+    #taskform-duedate{
+      border-style: none;
+      background-color: var(--addTaskBtn);
+      padding: .2rem 1rem;
+      border-radius: 50px;
+  
+      cursor: pointer;
+
+      &:focus{
+        outline: none;
+      }
+
+      
     }
 
   }
@@ -1048,4 +1068,47 @@ progress {
   }
 
 
+    #project-creator{
+     
+        background-color: #252730;
+        color: var(--menuTextL);
+        margin-top: 5px;
+      
+        
+
+    }
+    .new-project-name{
+      color: var(--menuTextH);
+
+      font-family: "Lato", sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border-style: none;
+      background-color: transparent;
+        &:focus{
+          outline: none;
+        }
+      
+    }
+    
+    #add-new-project{
+      position: relative;
+      top: 30px;
+      right: 30px;
+    }
   
+
+  input[type=color]{
+    width: 11px;
+    height: 11px;
+    border: none;
+    border-radius: 40px;
+    background: none;
+  }
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  input[type="color"]::-webkit-color-swatch {
+    border: solid 1px #000; /*change color of the swatch border here*/
+    border-radius: 0px;
+  }

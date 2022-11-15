@@ -1,4 +1,4 @@
-import { getDate } from "date-fns";
+import { getDate, parseISO } from "date-fns";
 import { filterCheckedSubtasks } from "./filters.js";
 import { allTasks } from "./storage.js";
 
@@ -64,6 +64,16 @@ function isMarked(task) {
   }
 }
 
+function hasDate(dueDate) {
+  if (dueDate != null) {
+    return `${monthNames[parseISO(dueDate).getMonth()]} ${getDate(
+      parseISO(dueDate)
+    )}`;
+  } else {
+    return "Any day";
+  }
+}
+
 function generateProject(project, actualProject) {
   const container = document.querySelector(".display-container");
   container.innerHTML = `<div class="section-title project-heading">
@@ -116,9 +126,7 @@ function generateTaskHtml(container, task, subtaskHtml) {
         <div class="task-title ${isMarked(task)}">${task.title}</div>
         <div class="task-info">
           <div>
-            <div class="task-duedate">${
-              monthNames[task.dueDate.getMonth()]
-            } ${getDate(task.dueDate)}</div>
+            <div class="task-duedate">${hasDate(task.dueDate)}</div>
             <div>
               <div class="progress-container">
               <div class="progress-bar" style="width:${

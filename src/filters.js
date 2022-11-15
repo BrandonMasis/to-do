@@ -1,5 +1,5 @@
+import { startOfWeek, endOfWeek, isToday, parseISO } from "date-fns";
 import { allTasks } from "./storage";
-import { startOfWeek, endOfWeek, isToday } from "date-fns";
 
 const today = new Date();
 function comparePriority(a, b) {
@@ -18,14 +18,18 @@ function filterTasksByProject(query) {
 }
 
 function filterToday() {
-  return allTasks.filter((task) => isToday(task.dueDate)).sort(comparePriority);
+  return allTasks
+    .filter((task) => isToday(parseISO(task.dueDate)) || task.dueDate == null)
+    .sort(comparePriority);
 }
 
 function filterWeekly() {
   return allTasks
     .filter(
       (task) =>
-        task.dueDate >= startOfWeek(today) && task.dueDate <= endOfWeek(today)
+        (parseISO(task.dueDate) >= startOfWeek(today) &&
+          parseISO(task.dueDate) <= endOfWeek(today)) ||
+        parseISO(task.dueDate) == null
     )
     .sort(comparePriority);
 }
@@ -35,7 +39,7 @@ function filterCheckedSubtasks(task) {
 }
 
 function filterNoCategory(list) {
-  return list.filter((task) => task.category == "");
+  return list.filter((task) => task.category == null);
 }
 
 function filterCategory(list, category) {
@@ -46,7 +50,11 @@ function filterCategory(list, category) {
 
 function filterOverdue() {
   return allTasks.filter(
-    (task) => task.dueDate < today && task.isChecked == false
+    (task) =>
+      parseISO(task.dueDate) < today &&
+      task.isChecked == false &&
+      parseISO(task.dueDate) != null &&
+      isToday(parseISO(task.dueDate)) == false
   );
 }
 

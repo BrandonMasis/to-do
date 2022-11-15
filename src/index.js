@@ -7,7 +7,7 @@ import {
   monthNames,
 } from "./content.js";
 
-import { startOfWeek, endOfWeek, toDate } from "date-fns";
+import { startOfWeek, endOfWeek } from "date-fns";
 
 import {
   filterToday,
@@ -19,7 +19,7 @@ import {
   filterNoCategory,
 } from "./filters.js";
 
-import { allTasks, allProjects } from "./storage";
+import { allProjects, allTasks } from "./storage";
 
 const newTaskBtnHtml = `<div class="task-container">
 <div class="new-task">+</div>
@@ -112,36 +112,21 @@ function projectOptionEvent() {
 
   projectOptions.forEach((option) => {
     option.addEventListener("click", () => {
-      actualProject = allProjects.filter(
-        (item) => item.name == `${option.getAttribute("data-project")}`
-      )[0];
-
       actualTab = `${option.getAttribute("data-project")}`;
-      actualProject = actualProject;
+
+      actualProject = allProjects.filter((item) => item.name == actualTab)[0];
 
       display(actualTab, actualProject);
     });
   });
 }
 
-//
-function assignId() {
-  let taskId = -1;
-  allTasks.forEach((task) => {
-    let subtaskId = -1;
-
-    taskId += 1;
-    task.id = taskId;
-
-    task.subtasks.forEach((subtask) => {
-      subtaskId += 1;
-
-      subtask.id = subtaskId;
-    });
-  });
+function showActualDay() {
+  const actualDay = document.querySelector("#actual-day");
+  actualDay.textContent = `${
+    monthNames[startOfWeek(new Date()).getMonth()]
+  } ${new Date().getDate()}`;
 }
-
-//
 
 function showActualWeek() {
   const actualWeek = document.querySelector("#actual-week");
@@ -152,22 +137,12 @@ function showActualWeek() {
   } ${endOfWeek(new Date()).getDate()}`;
 }
 
-function showActualDay() {
-  const actualDay = document.querySelector("#actual-day");
-  actualDay.textContent = `${
-    monthNames[startOfWeek(new Date()).getMonth()]
-  } ${new Date().getDate()}`;
-}
+function showTotalTasks() {
+  const todayTotal = document.querySelector("#today-option .optionTotal");
+  const weeklyTotal = document.querySelector("#weekly-option .optionTotal");
 
-function displayWeeklyTasks() {
-  const weeklyTasks = document.querySelector("#weekly-tasks");
-
-  filterWeekly().forEach((task) => {
-    let subtaskHtml = generateSubtaskHtml(task);
-    generateTaskHtml(weeklyTasks, task, subtaskHtml);
-  });
-
-  weeklyTasks.innerHTML += newTaskBtnHtml;
+  todayTotal.textContent = `${filterToday().length}`;
+  weeklyTotal.textContent = `${filterWeekly().length}`;
 }
 
 function displayTodayTasks() {
@@ -188,12 +163,15 @@ function displayTodayTasks() {
   });
 }
 
-function showTotalTasks() {
-  const todayTotal = document.querySelector("#today-option .optionTotal");
-  const weeklyTotal = document.querySelector("#weekly-option .optionTotal");
+function displayWeeklyTasks() {
+  const weeklyTasks = document.querySelector("#weekly-tasks");
 
-  todayTotal.textContent = `${filterToday().length}`;
-  weeklyTotal.textContent = `${filterWeekly().length}`;
+  filterWeekly().forEach((task) => {
+    let subtaskHtml = generateSubtaskHtml(task);
+    generateTaskHtml(weeklyTasks, task, subtaskHtml);
+  });
+
+  weeklyTasks.innerHTML += newTaskBtnHtml;
 }
 
 function displayCategorieTasks(actualProject) {
@@ -204,10 +182,18 @@ function displayCategorieTasks(actualProject) {
 
   let noCategoryTasks = filterNoCategory(projectTasks);
 
-  noCategoryTasks.forEach((item) => {
-    let subtaskHtml = generateSubtaskHtml(item);
-    generateTaskHtml(noCategoryContainer, item, subtaskHtml);
-  });
+  if (noCategoryTasks == []) {
+    noCategoryContainer.innerHTML += newTaskBtnHtml;
+  } else {
+    noCategoryContainer.innerHTML = "";
+
+    noCategoryTasks.forEach((item) => {
+      let subtaskHtml = generateSubtaskHtml(item);
+      generateTaskHtml(noCategoryContainer, item, subtaskHtml);
+    });
+
+    noCategoryContainer.innerHTML += newTaskBtnHtml;
+  }
 
   categories.forEach((category) => {
     let categoryTasks = filterCategory(projectTasks, category);
@@ -220,16 +206,6 @@ function displayCategorieTasks(actualProject) {
     category.innerHTML += newTaskBtnHtml;
   });
 }
-
-todayOption.addEventListener("click", () => {
-  actualTab = "today-option";
-  display(actualTab, actualProject);
-});
-
-weeklyOption.addEventListener("click", () => {
-  actualTab = "weekly-option";
-  display(actualTab, actualProject);
-});
 
 function checkOnClick() {
   const taskLabels = document.querySelectorAll(".task-label");
@@ -254,6 +230,8 @@ function checkOnClick() {
 
         actualTask.querySelector(".task-title").classList.add("marked-task");
       }
+
+      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
     });
   });
 
@@ -269,13 +247,13 @@ function checkOnClick() {
 
       if (allTasks[taskId].subtasks[subtaskId].isChecked == true) {
         actualCheckbox.checked = false;
-
         allTasks[taskId].subtasks[subtaskId].isChecked = false;
       } else {
         actualCheckbox.checked = true;
-
         allTasks[taskId].subtasks[subtaskId].isChecked = true;
       }
+
+      // Making the task progress bar progress
 
       let progressText =
         actualCheckbox.parentElement.parentElement.parentElement.parentElement.querySelector(
@@ -295,176 +273,11 @@ function checkOnClick() {
         (100 / allTasks[taskId].subtasks.length) *
         filterCheckedSubtasks(allTasks[taskId])
       }%`;
+
+      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
     });
   });
 }
-
-function assignDropSubtasks() {
-  const dropSubtasks = document.querySelectorAll(".dropSubtasks");
-
-  dropSubtasks.forEach((drop) => {
-    drop.parentElement.addEventListener("click", (e) => {
-      let task = drop.parentElement.parentElement.parentElement.parentElement;
-
-      if (task.classList.contains("task-open")) {
-        task.classList.remove("task-open");
-        drop.style.cssText = "transform: rotate(0deg)";
-      } else {
-        task.classList.add("task-open");
-
-        drop.style.cssText = "transform: rotate(180deg)";
-      }
-    });
-  });
-}
-
-function assignNewTaskFunction() {
-  const newTaskBtn = document.querySelectorAll(".new-task");
-  newTaskBtn.forEach((btn) =>
-    btn.addEventListener("click", () => {
-      if (btn.classList.contains("new-task-form") == false) {
-        btn.classList.add("new-task-form");
-
-        // Select priority and store the option
-        let taskPriority = 4;
-
-        document.querySelector(".new-task-form").innerHTML = newTaskFormHtml;
-        document.querySelectorAll(".priority-option").forEach((option) => {
-          option.addEventListener("click", () => {
-            taskPriority = option.getAttribute("data-priority");
-
-            document.querySelector(".fa-flag").style.color =
-              priorityColors[taskPriority - 1];
-            option.parentElement.classList.remove("open");
-          });
-        });
-
-        document
-          .querySelector(".new-task-form")
-          .addEventListener("click", (e) => {
-            if (
-              e.target.classList.contains("priority-option") == false &&
-              document
-                .querySelector("#taskform-priority")
-                .classList.contains("open") &&
-              e.target.classList.contains("fa-flag") == false
-            ) {
-              document
-                .querySelector("#taskform-priority")
-                .classList.remove("open");
-            }
-          });
-
-        document
-          .querySelector("#taskform-priority")
-          .addEventListener("click", (e) => {
-            if (e.target.classList.contains("fa-flag")) {
-              e.target.parentElement.classList.add("open");
-            }
-          });
-
-        document
-          .querySelector("#taskform-add-btn")
-          .addEventListener("click", (e) => {
-            let taskName = document.querySelector("#taskform-name").value;
-            let taskDescription = document.querySelector(
-              "#taskform-description"
-            ).value;
-            let duedateSplit = document
-              .querySelector("#taskform-duedate")
-              .value.split("-");
-
-            let taskDuedate = duedateSplit.join(",");
-
-            if (actualTab == "today-option") {
-              allTasks.push(
-                taskFactory(
-                  taskName,
-                  taskDescription,
-                  new Date(taskDuedate),
-                  taskPriority,
-                  [],
-                  false,
-                  undefined,
-                  undefined
-                )
-              );
-            } else if (actualTab == "weekly-option") {
-              allTasks.push(
-                taskFactory(
-                  taskName,
-                  taskDescription,
-                  new Date(taskDuedate),
-                  new taskPriority(),
-                  [],
-                  false,
-                  undefined,
-                  undefined
-                )
-              );
-            } else {
-              allTasks.push(
-                taskFactory(
-                  taskName,
-                  taskDescription,
-                  new Date(taskDuedate),
-                  taskPriority,
-                  [],
-                  false,
-                  actualTab,
-                  e.target.parentElement.parentElement.parentElement.parentElement.getAttribute(
-                    "data-category"
-                  )
-                )
-              );
-            }
-
-            assignId();
-            display(actualTab, actualProject);
-          });
-      } else {
-        return;
-      }
-    })
-  );
-}
-
-function assignNewSubtaskFunction() {
-  const newSubtaskBtn = document.querySelectorAll(".new-subtask");
-  newSubtaskBtn.forEach((btn) =>
-    btn.addEventListener("click", () => {
-      let a = prompt("title");
-      let b = false;
-      let taskIndex = btn.parentElement
-        .querySelector(".task")
-        .getAttribute("data-task-id");
-
-      allTasks[taskIndex].subtasks.push(subtaskFactory(a, b));
-      assignId();
-      display(actualTab, actualProject);
-
-      // Opens the container, so you see the subtask being added
-      document
-        .querySelector(`[data-task-id="${taskIndex}"]`)
-        .parentElement.classList.add("task-open");
-
-      console.log(allTasks);
-    })
-  );
-}
-
-//Function calls when you open the app
-
-assignId();
-
-showProjectsOnMenu();
-projectOptionEvent();
-showTotalTasks();
-
-display(actualTab, actualProject);
-
-// I'm showing the correct amount of tasks when displayed, but not on change
-//So probably just make a function that takes care of that, and remove
 
 function assignDeleteTask() {
   const deleteTaskBtns = document.querySelectorAll(
@@ -484,43 +297,175 @@ function assignDeleteTask() {
   });
 }
 
-function display(actualTab, actualProject) {
-  if (actualTab == "today-option") {
-    generateToday();
-    displayTodayTasks();
-    showActualDay();
-  } else if (actualTab == "weekly-option") {
-    generateWeekly();
-    displayWeeklyTasks();
-    showActualWeek();
-  } else {
-    generateProject(
-      allTasks.filter((task) => task.project == actualTab),
-      actualProject
-    );
+function assignDropSubtasks() {
+  const dropSubtasks = document.querySelectorAll(".dropSubtasks");
 
-    displayCategorieTasks(actualProject);
-    assignNewSubtitleFunction();
-  }
+  dropSubtasks.forEach((drop) => {
+    drop.parentElement.addEventListener("click", (e) => {
+      let task = drop.parentElement.parentElement.parentElement.parentElement;
 
-  assignDropSubtasks();
-  assignNewTaskFunction();
-  assignNewSubtaskFunction();
-  checkOnClick();
-  assignDeleteTask();
+      if (task.classList.contains("task-open")) {
+        task.classList.remove("task-open");
+        drop.style.cssText = "transform: rotate(0deg)";
+      } else {
+        task.classList.add("task-open");
+        drop.style.cssText = "transform: rotate(180deg)";
+      }
+    });
+  });
 }
 
-const addProjectBtn = document.querySelector("#add-projects");
+function assignNewTaskFunction() {
+  const newTaskBtn = document.querySelectorAll(".new-task");
+  newTaskBtn.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      if (btn.classList.contains("new-task-form") == false) {
+        document.querySelectorAll(".new-task-form").forEach((item) => {
+          item.classList.remove("new-task-form");
+          item.innerHTML = "+";
+        });
 
-addProjectBtn.addEventListener("click", () => {
-  let a = prompt("Project name");
-  let b = prompt("hex color");
+        btn.classList.add("new-task-form");
+        document.querySelector(".new-task-form").innerHTML = newTaskFormHtml;
 
-  allProjects.push(projectFactory(a, b, []));
+        // Select priority and store the option
+        let taskPriority = 4;
+        document
+          .querySelector(".new-task-form")
+          .addEventListener("click", (e) => {
+            if (
+              e.target.classList.contains("priority-option") == false &&
+              document
+                .querySelector("#taskform-priority")
+                .classList.contains("open") &&
+              e.target.classList.contains("fa-flag") == false
+            ) {
+              document
+                .querySelector("#taskform-priority")
+                .classList.remove("open");
+            }
+          });
 
-  showProjectsOnMenu();
-  projectOptionEvent();
-});
+        // If you click on the flag, 4 options with events will open, and close the flag, else
+        // if you click somewhere else, it will close
+        document
+          .querySelector("#taskform-priority")
+          .addEventListener("click", (e) => {
+            if (e.target.classList.contains("fa-flag")) {
+              e.target.parentElement.classList.add("open");
+            }
+          });
+
+        document.querySelectorAll(".priority-option").forEach((option) => {
+          option.addEventListener("click", () => {
+            taskPriority = option.getAttribute("data-priority");
+
+            document.querySelector(".fa-flag").style.color =
+              priorityColors[taskPriority - 1];
+            option.parentElement.classList.remove("open");
+          });
+        });
+
+        // Get the values basically
+        document
+          .querySelector("#taskform-add-btn")
+          .addEventListener("click", (e) => {
+            let taskName = document.querySelector("#taskform-name").value;
+            let taskDescription = document.querySelector(
+              "#taskform-description"
+            ).value;
+
+            // Something weird happens with the dates, they ended up being a month behind or a day before.
+            let taskDuedate = "";
+
+            if (document.querySelector("#taskform-duedate").value == "") {
+              taskDuedate = null;
+            } else {
+              let duedateSplit = document
+                .querySelector("#taskform-duedate")
+                .value.split("-");
+
+              taskDuedate = new Date(
+                parseInt(duedateSplit[0]),
+                parseInt(duedateSplit[1]) - 1,
+                parseInt(duedateSplit[2])
+              );
+            }
+
+            if (actualTab == "today-option" || actualTab == "weekly-option") {
+              allTasks.push(
+                taskFactory(
+                  taskName,
+                  taskDescription,
+                  taskDuedate,
+                  taskPriority,
+                  [],
+                  false,
+                  undefined,
+                  undefined
+                )
+              );
+            } else {
+              allTasks.push(
+                taskFactory(
+                  taskName,
+                  taskDescription,
+                  taskDuedate,
+                  taskPriority,
+                  [],
+                  false,
+                  actualTab,
+                  e.target.parentElement.parentElement.parentElement.parentElement.getAttribute(
+                    "data-category"
+                  )
+                )
+              );
+            }
+
+            assignId();
+            localStorage.setItem("all-tasks", JSON.stringify(allTasks));
+            display(actualTab, actualProject);
+            showTotalTasks();
+          });
+
+        document
+          .querySelector("#taskform-cancel-btn")
+          .addEventListener("click", (e) => {
+            event.stopImmediatePropagation();
+            let taskBtn = e.target.parentElement.parentElement;
+            taskBtn.classList.remove("new-task-form");
+            taskBtn.innerHTML = "+";
+          });
+      } else {
+        return;
+      }
+    })
+  );
+}
+
+function assignNewSubtaskFunction() {
+  const newSubtaskBtn = document.querySelectorAll(".new-subtask");
+  newSubtaskBtn.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      let a = prompt("title");
+      let b = false;
+      let taskIndex = btn.parentElement
+        .querySelector(".task")
+        .getAttribute("data-task-id");
+
+      allTasks[taskIndex].subtasks.push(subtaskFactory(a, b));
+      console.log(allTasks);
+      assignId();
+      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
+      display(actualTab, actualProject);
+
+      // Opens the container, so you see the subtask being added
+      document
+        .querySelector(`[data-task-id="${taskIndex}"]`)
+        .parentElement.classList.add("task-open");
+    })
+  );
+}
 
 function assignNewSubtitleFunction() {
   let newSubtitleContainer = document.querySelector(".new-subtitle");
@@ -548,6 +493,81 @@ function assignNewSubtitleFunction() {
   });
 }
 
+// I'm showing the correct amount of tasks when displayed, but not on change
+//So probably just make a function that takes care of that, and remove
+function assignId() {
+  let taskId = -1;
+  allTasks.forEach((task) => {
+    let subtaskId = -1;
+
+    taskId += 1;
+    task.id = taskId;
+
+    task.subtasks.forEach((subtask) => {
+      subtaskId += 1;
+
+      subtask.id = subtaskId;
+    });
+  });
+}
+
+function display(actualTab, actualProject) {
+  if (localStorage.getItem("all-tasks") == null) {
+    allTasks = [];
+  } else {
+    allTasks = JSON.parse(localStorage.getItem("all-tasks"));
+  }
+
+  if (actualTab == "today-option") {
+    generateToday();
+    displayTodayTasks();
+    showActualDay();
+  } else if (actualTab == "weekly-option") {
+    generateWeekly();
+    displayWeeklyTasks();
+    showActualWeek();
+  } else {
+    generateProject(
+      allTasks.filter((task) => task.project == actualTab),
+      actualProject
+    );
+
+    displayCategorieTasks(actualProject);
+    assignNewSubtitleFunction();
+  }
+
+  assignDropSubtasks();
+  assignNewTaskFunction();
+  assignNewSubtaskFunction();
+  checkOnClick();
+  assignDeleteTask();
+  showProjectsOnMenu();
+  projectOptionEvent();
+}
+
+// This one needs work
+const addProjectBtn = document.querySelector("#add-projects");
+addProjectBtn.addEventListener("click", () => {
+  projectsContainer.innerHTML += `<div class="project" id="project-creator" data-project="null">
+  <div> <input type="color" class="new-project-color" name="">
+  <input type="text" placeholder="Click to edit" class="new-project-name">
+  </div>
+  <div id="add-new-project" class="optionTotal">Done</div>
+  </div>`;
+
+  document.querySelector("#add-new-project").addEventListener("click", () => {
+    let a = document.querySelector(".new-project-name").value;
+    let b = document.querySelector(".new-project-color").value;
+
+    allProjects.push(projectFactory(a, b, []));
+
+    console.log(allProjects);
+
+    showProjectsOnMenu();
+    projectOptionEvent();
+  });
+});
+
 // So do it with classes intead of focus, when you click de window, if the thing still has the class on, remove it.
 
 window.addEventListener("click", (e) => {
@@ -567,3 +587,20 @@ window.addEventListener("click", (e) => {
     }
   }
 });
+
+todayOption.addEventListener("click", () => {
+  actualTab = "today-option";
+  display(actualTab, actualProject);
+});
+
+weeklyOption.addEventListener("click", () => {
+  actualTab = "weekly-option";
+  display(actualTab, actualProject);
+});
+
+//Function calls when you open the app
+assignId();
+showProjectsOnMenu();
+projectOptionEvent();
+showTotalTasks();
+display(actualTab, actualProject);
