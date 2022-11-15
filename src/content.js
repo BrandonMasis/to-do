@@ -20,7 +20,7 @@ const monthNames = [
 function generateToday() {
   const container = document.querySelector(".display-container");
   container.innerHTML = `
-    <div class="section-title"><h2>Overdue</h2></div>
+    <div class="section-title overdue-title"><h2>Overdue</h2></div>
 
     <div id="overdue-tasks" class="big-container"></div>
       
@@ -79,6 +79,7 @@ function generateProject(project, actualProject) {
   container.innerHTML = `<div class="section-title project-heading">
   <div class="square" style=background-color:${actualProject.color}></div>
   <h2>${actualProject.name}</h2>
+  <i class="fa-regular fa-trash-can delete-project-btn"></i>
   </div>`;
 
   container.innerHTML += `
@@ -96,7 +97,7 @@ function generateProject(project, actualProject) {
   }
 
   for (let i = 0; i < actualProject.categories.length; i++) {
-    container.innerHTML += `<div class="subtitle"><h3>${actualProject.categories[i]}</h3></div>
+    container.innerHTML += `<div class="subtitle category-subtitle"><h3>${actualProject.categories[i]}</h3> <i class="fa-regular fa-trash-can delete-category-btn"></i></div>
     <div data-project="${actualProject.name}" data-category="${actualProject.categories[i]}" class="big-container category">`;
   }
 

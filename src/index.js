@@ -158,10 +158,15 @@ function displayTodayTasks() {
 
   todayTasks.innerHTML += newTaskBtnHtml;
 
-  filterOverdue().forEach((task) => {
-    let subtaskHtml = generateSubtaskHtml(task);
-    generateTaskHtml(overdueTasks, task, subtaskHtml);
-  });
+  if (filterOverdue() != "") {
+    filterOverdue().forEach((task) => {
+      let subtaskHtml = generateSubtaskHtml(task);
+      generateTaskHtml(overdueTasks, task, subtaskHtml);
+    });
+  } else {
+    overdueTasks.style.display = "none";
+    document.querySelector(".overdue-title").style.display = "none";
+  }
 }
 
 function displayWeeklyTasks() {
@@ -301,6 +306,51 @@ function assignDeleteTask() {
       assignId();
       display(actualTab, actualProject);
       showTotalTasks();
+    });
+  });
+}
+
+function assignDeleteProject() {
+  const deleteProjectBtn = document.querySelector(".delete-project-btn");
+
+  deleteProjectBtn.addEventListener("click", () => {
+    allProjects.splice(allProjects.indexOf(actualProject), 1);
+    localStorage.setItem("all-projects", JSON.stringify(allProjects));
+
+    allTasks = allTasks.filter((task) => task.project != actualProject.name);
+    localStorage.setItem("all-tasks", JSON.stringify(allTasks));
+
+    showTotalTasks();
+    display(actualTab, actualProject);
+  });
+}
+
+function assignDeleteCategory() {
+  const deleteCategoryBtns = document.querySelectorAll(".delete-category-btn");
+
+  deleteCategoryBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      let projectTasks = allTasks.filter(
+        (task) => task.project == actualProject.name
+      );
+
+      allTasks = projectTasks.filter(
+        (task) =>
+          task.category != btn.previousSibling.previousSibling.textContent
+      );
+
+      actualProject.categories.splice(
+        actualProject.categories.indexOf(
+          btn.previousSibling.previousSibling.textContent
+        ),
+        1
+      );
+
+      localStorage.setItem("all-projects", JSON.stringify(allProjects));
+      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
+
+      showTotalTasks();
+      display(actualTab, actualProject);
     });
   });
 }
@@ -462,7 +512,7 @@ function assignNewSubtaskFunction() {
         .getAttribute("data-task-id");
 
       allTasks[taskIndex].subtasks.push(subtaskFactory(a, b));
-      console.log(allTasks);
+
       assignId();
       localStorage.setItem("all-tasks", JSON.stringify(allTasks));
       display(actualTab, actualProject);
@@ -496,7 +546,7 @@ function assignNewSubtitleFunction() {
     actualProject.categories.push(
       document.querySelector("#new-subtitle-btn").value
     );
-
+    localStorage.setItem("all-projects", JSON.stringify(allProjects));
     display(actualTab, actualProject);
   });
 }
@@ -548,6 +598,8 @@ function display(actualTab, actualProject) {
 
     displayCategorieTasks(actualProject);
     assignNewSubtitleFunction();
+    assignDeleteProject();
+    assignDeleteCategory();
   }
 
   assignDropSubtasks();

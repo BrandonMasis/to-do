@@ -164,9 +164,9 @@ body {
 }
 
 .project-tag {
-  background-color: greenyellow;
   width: 10px;
   height: 10px;
+  background-color: var(--addTaskBtn);
 }
 
 .project {
@@ -206,6 +206,14 @@ body {
 .section-title {
   margin-bottom: 0.5rem;
 }
+.section-title i {
+  color: var(--displayL);
+  display: none;
+}
+.section-title:hover i {
+  display: flex;
+  cursor: pointer;
+}
 
 .section-title h2 {
   font-size: 30px;
@@ -237,6 +245,10 @@ body {
   gap: 0.5rem;
   margin-left: 1rem;
   user-select: none;
+  align-items: center;
+}
+.project-heading i {
+  margin-top: 5px;
 }
 
 .project-heading h2 {
@@ -247,6 +259,20 @@ body {
   margin-bottom: 0.8rem;
   user-select: none;
   margin-left: 2rem;
+}
+
+.category-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.category-subtitle i {
+  color: var(--displayL);
+  cursor: pointer;
+  display: none;
+}
+.category-subtitle:hover i {
+  display: flex;
 }
 
 .subtitle h3 {
@@ -335,7 +361,8 @@ body {
 .square {
   width: 0.5rem;
   height: 0.5rem;
-  background-color: coral;
+  margin-top: 5px;
+  background-color: var(--addTaskBtn);
 }
 
 .task {

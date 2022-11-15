@@ -171,6 +171,4 @@ if (localStorage.getItem("all-projects") == null) {
   allProjects = JSON.parse(localStorage.getItem("all-projects"));
 }
 
-console.log(allTasks);
-
 export { allProjects, allTasks };
