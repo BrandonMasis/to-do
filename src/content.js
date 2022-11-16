@@ -1,6 +1,5 @@
 import { getDate, parseISO } from "date-fns";
 import { filterCheckedSubtasks } from "./filters.js";
-import { allTasks } from "./storage.js";
 
 const monthNames = [
   "January",
@@ -185,11 +184,48 @@ function generateSubtaskHtml(task) {
   return html;
 }
 
+const newTaskBtnHtml = `<div class="task-container">
+<div class="new-task">+</div>
+</div>
+</div>`;
+
+const newTaskFormHtml = `<div class="form">
+<div class="top">
+  <input type="text" id="taskform-name"
+    placeholder="Task name">
+  <input type="text" id="taskform-description"
+    placeholder="Description">
+</div>
+<div class="bottom">
+  <input type="date" id="taskform-duedate"
+    placeholder="Due date">
+  <div id="taskform-priority"><i class="fa-solid fa-flag"></i><div class="priority-option" data-priority="1"></div><div class="priority-option" data-priority="2"></div><div class="priority-option" data-priority="3"></div><div class="priority-option" data-priority="4"></div></div>
+</div>
+</div>
+<div class="form-btns">
+<div id="taskform-cancel-btn">Cancel</div>
+<div id="taskform-add-btn">Add Task</div>
+
+</div>`;
+
+const projectCreatorHtml = `<div id="project-creator"><div class="project" id="project-creator" data-project="null">
+<div> <input type="color" class="new-project-color" name="">
+<input type="text" placeholder="Click to edit" class="new-project-name">
+</div>
+</div><div class="new-project-options"><h3 class="warning"></h3><div id="cancel-new-project" class="option-total">Cancel</div><div id="add-new-project" class="option-total">Done</div>
+</div></div>`;
+
+const priorityColors = ["#F95050", "#F9AB50", "#9BB5F9", "#4C4D5C"];
+
 export {
   generateToday,
   generateWeekly,
+  priorityColors,
   generateProject,
   generateTaskHtml,
   generateSubtaskHtml,
+  projectCreatorHtml,
   monthNames,
+  newTaskBtnHtml,
+  newTaskFormHtml,
 };

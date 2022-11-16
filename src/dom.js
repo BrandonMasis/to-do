@@ -1,3 +1,7 @@
+const todayOption = document.querySelector("#today-option");
+const weeklyOption = document.querySelector("#weekly-option");
+const projectsContainer = document.querySelector("#projects-container");
+const addProjectBtn = document.querySelector("#add-projects");
 import {
   generateToday,
   generateWeekly,
@@ -5,6 +9,10 @@ import {
   generateTaskHtml,
   generateSubtaskHtml,
   monthNames,
+  newTaskBtnHtml,
+  newTaskFormHtml,
+  projectCreatorHtml,
+  priorityColors,
 } from "./content.js";
 
 import { startOfWeek, endOfWeek } from "date-fns";
@@ -20,36 +28,6 @@ import {
 } from "./filters.js";
 
 import { allProjects, allTasks } from "./storage";
-
-const newTaskBtnHtml = `<div class="task-container">
-<div class="new-task">+</div>
-</div>
-</div>`;
-
-const newTaskFormHtml = `<div class="form">
-<div class="top">
-  <input type="text" id="taskform-name"
-    placeholder="Task name">
-  <input type="text" id="taskform-description"
-    placeholder="Description">
-</div>
-<div class="bottom">
-  <input type="date" id="taskform-duedate"
-    placeholder="Due date">
-  <div id="taskform-priority"><i class="fa-solid fa-flag"></i><div class="priority-option" data-priority="1"></div><div class="priority-option" data-priority="2"></div><div class="priority-option" data-priority="3"></div><div class="priority-option" data-priority="4"></div></div>
-</div>
-</div>
-<div class="form-btns">
-<div id="taskform-cancel-btn">Cancel</div>
-<div id="taskform-add-btn">Add Task</div>
-
-</div>`;
-
-const priorityColors = ["#F95050", "#F9AB50", "#9BB5F9", "#4C4D5C"];
-
-const todayOption = document.querySelector("#today-option");
-const weeklyOption = document.querySelector("#weekly-option");
-const projectsContainer = document.querySelector("#projects-container");
 
 let actualTab = "today-option";
 let actualProject = [];
@@ -102,7 +80,7 @@ function showProjectsOnMenu() {
         item.name
       }"><div><span class="project-tag" style="background-color:${
         item.color
-      }"></span> <h5>${item.name}</h5></div> <div class="optionTotal">${
+      }"></span> <h5>${item.name}</h5></div> <div class="option-total">${
         allTasks.filter((task) => task.project == item.name).length
       }</div></div>`)
   );
@@ -139,8 +117,8 @@ function showActualWeek() {
 }
 
 function showTotalTasks() {
-  const todayTotal = document.querySelector("#today-option .optionTotal");
-  const weeklyTotal = document.querySelector("#weekly-option .optionTotal");
+  const todayTotal = document.querySelector("#today-option .option-total");
+  const weeklyTotal = document.querySelector("#weekly-option .option-total");
 
   todayTotal.textContent = `${filterToday().length}`;
   weeklyTotal.textContent = `${filterWeekly().length}`;
@@ -281,76 +259,6 @@ function checkOnClick() {
       }%`;
 
       localStorage.setItem("all-tasks", JSON.stringify(allTasks));
-    });
-  });
-}
-
-function assignDeleteTask() {
-  const deleteTaskBtns = document.querySelectorAll(
-    ".task-options div:nth-child(1)"
-  );
-
-  deleteTaskBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (allTasks.length > 1) {
-        allTasks.splice(
-          btn.parentElement.parentElement.getAttribute("data-task-id"),
-          1
-        );
-      } else {
-        allTasks = [];
-      }
-
-      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
-
-      assignId();
-      display(actualTab, actualProject);
-      showTotalTasks();
-    });
-  });
-}
-
-function assignDeleteProject() {
-  const deleteProjectBtn = document.querySelector(".delete-project-btn");
-
-  deleteProjectBtn.addEventListener("click", () => {
-    allProjects.splice(allProjects.indexOf(actualProject), 1);
-    localStorage.setItem("all-projects", JSON.stringify(allProjects));
-
-    allTasks = allTasks.filter((task) => task.project != actualProject.name);
-    localStorage.setItem("all-tasks", JSON.stringify(allTasks));
-
-    showTotalTasks();
-    display(actualTab, actualProject);
-  });
-}
-
-function assignDeleteCategory() {
-  const deleteCategoryBtns = document.querySelectorAll(".delete-category-btn");
-
-  deleteCategoryBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      let projectTasks = allTasks.filter(
-        (task) => task.project == actualProject.name
-      );
-
-      allTasks = projectTasks.filter(
-        (task) =>
-          task.category != btn.previousSibling.previousSibling.textContent
-      );
-
-      actualProject.categories.splice(
-        actualProject.categories.indexOf(
-          btn.previousSibling.previousSibling.textContent
-        ),
-        1
-      );
-
-      localStorage.setItem("all-projects", JSON.stringify(allProjects));
-      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
-
-      showTotalTasks();
-      display(actualTab, actualProject);
     });
   });
 }
@@ -551,8 +459,76 @@ function assignNewSubtitleFunction() {
   });
 }
 
-// I'm showing the correct amount of tasks when displayed, but not on change
-//So probably just make a function that takes care of that, and remove
+function assignDeleteTask() {
+  const deleteTaskBtns = document.querySelectorAll(
+    ".task-options div:nth-child(1)"
+  );
+
+  deleteTaskBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (allTasks.length > 1) {
+        allTasks.splice(
+          btn.parentElement.parentElement.getAttribute("data-task-id"),
+          1
+        );
+      } else {
+        allTasks = [];
+      }
+
+      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
+
+      assignId();
+      display(actualTab, actualProject);
+      showTotalTasks();
+    });
+  });
+}
+
+function assignDeleteProject() {
+  const deleteProjectBtn = document.querySelector(".delete-project-btn");
+
+  deleteProjectBtn.addEventListener("click", () => {
+    allProjects.splice(allProjects.indexOf(actualProject), 1);
+    localStorage.setItem("all-projects", JSON.stringify(allProjects));
+
+    allTasks = allTasks.filter((task) => task.project != actualProject.name);
+    localStorage.setItem("all-tasks", JSON.stringify(allTasks));
+
+    showTotalTasks();
+    display("today-option");
+  });
+}
+
+function assignDeleteCategory() {
+  const deleteCategoryBtns = document.querySelectorAll(".delete-category-btn");
+
+  deleteCategoryBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      let projectTasks = allTasks.filter(
+        (task) => task.project == actualProject.name
+      );
+
+      allTasks = projectTasks.filter(
+        (task) =>
+          task.category != btn.previousSibling.previousSibling.textContent
+      );
+
+      actualProject.categories.splice(
+        actualProject.categories.indexOf(
+          btn.previousSibling.previousSibling.textContent
+        ),
+        1
+      );
+
+      localStorage.setItem("all-projects", JSON.stringify(allProjects));
+      localStorage.setItem("all-tasks", JSON.stringify(allTasks));
+
+      showTotalTasks();
+      display(actualTab, actualProject);
+    });
+  });
+}
+
 function assignId() {
   let taskId = -1;
   allTasks.forEach((task) => {
@@ -611,29 +587,36 @@ function display(actualTab, actualProject) {
   projectOptionEvent();
 }
 
-// This one needs work
-const addProjectBtn = document.querySelector("#add-projects");
 addProjectBtn.addEventListener("click", () => {
-  projectsContainer.innerHTML += `<div class="project" id="project-creator" data-project="null">
-  <div> <input type="color" class="new-project-color" name="">
-  <input type="text" placeholder="Click to edit" class="new-project-name">
-  </div>
-  <div id="add-new-project" class="optionTotal">Done</div>
-  </div>`;
+  projectsContainer.innerHTML += projectCreatorHtml;
 
   document.querySelector("#add-new-project").addEventListener("click", () => {
     let a = document.querySelector(".new-project-name").value;
     let b = document.querySelector(".new-project-color").value;
 
-    allProjects.push(projectFactory(a, b, []));
-    localStorage.setItem("all-projects", JSON.stringify(allProjects));
+    let count = 0;
+    allProjects.forEach((project) => {
+      if (project.name == document.querySelector(".new-project-name").value) {
+        count += 1;
+      }
+    });
 
-    showProjectsOnMenu();
-    projectOptionEvent();
+    if (count == 0) {
+      allProjects.push(projectFactory(a, b, []));
+      localStorage.setItem("all-projects", JSON.stringify(allProjects));
+      showProjectsOnMenu();
+      projectOptionEvent();
+    } else if (document.querySelector(".warning").textContent == "") {
+      document.querySelector(".warning").textContent =
+        "Cannot leave this space empty";
+      document.querySelector(".warning").style.display = "flex";
+    } else {
+      document.querySelector(".warning").style.display = "flex";
+      document.querySelector(".warning").textContent =
+        "Project names cannot be repeated";
+    }
   });
 });
-
-// So do it with classes intead of focus, when you click de window, if the thing still has the class on, remove it.
 
 window.addEventListener("click", (e) => {
   if (document.querySelector(".new-subtitle-open") != null) {
